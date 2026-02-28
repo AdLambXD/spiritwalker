@@ -1,0 +1,114 @@
+# 修仙系统配置文件
+
+settings:
+  cultivation:
+    # 每秒修炼获得的修为
+    base_gain_per_second: 0.05
+    
+    # 打坐时打断移动的距离阈值（方块）
+    move_distance_threshold: 0.5
+    
+    # 盔甲架冥想设置
+    armor_stand_meditation:
+      # 是否启用盔甲架冥想功能
+      enabled: true
+      
+      # 冥想时的修为增益倍数
+      multiplier: 2.0
+      
+      # 检测频率（ticks）
+      detection_interval: 10
+      
+      # 下架冷却时间（ticks）
+      dismount_cooldown: 40
+      
+      # 是否需要特定标签才能冥想
+      require_tag: false
+      
+      # 冥想盔甲架的标签（如果require_tag为true）
+      meditation_tag: "meditation_stand"
+      
+  # 怪物击杀设置
+  mob_kill:
+    # 是否启用怪物击杀获得修为
+    enabled: true
+    
+    # 难度倍数（可根据服务器难度调整）
+    difficulty_multiplier: 1.0
+    
+    # 是否显示击杀获得修为的消息
+    show_exp_message: true
+    
+    # 境界修为倍数（境界越高，击杀怪物获得越多修为）
+    realm_multipliers:
+      LianQi: 1.0    # 炼气
+      ZhuJi: 1.2     # 筑基
+      JinDan: 1.5    # 金丹
+      YuanYing: 2.0  # 元婴
+      HuaShen: 2.5   # 化神
+      
+  data:
+    # 自动保存间隔（分钟）
+    auto_save_interval_minutes: 5
+    
+    # 数据存储方式: YAML, MYSQL
+    storage_type: "YAML"
+    
+    # MySQL 配置
+    mysql:
+      host: "localhost"
+      port: 3306
+      database: "simplexiuzhen"
+      username: "root"
+      password: "password"
+      # 连接池配置
+      maximum_pool_size: 10
+      minimum_idle: 2
+      connection_timeout: 30000
+      idle_timeout: 600000
+      max_lifetime: 1800000
+
+# 命令帮助信息配置
+messages:
+  help:
+    player_commands:
+      - "/xiuzhen - 查看基本信息和帮助"
+      - "/xiuzhen meditate - 开始/停止打坐修炼"
+      - "/xiuzhen stats - 查看详细修仙状态"
+      - "/xiuzhen top [页码] - 查看服务器排行榜"
+      - "/xiuzhen info - 查看境界体系介绍"
+    admin_commands:
+      - "/xiuzhenadmin setrealm <玩家> <境界> - 设置玩家境界"
+      - "/xiuzhenadmin addexp <玩家> <修为> - 添加修为点数"
+      - "/xiuzhenadmin reloadconfig - 重载配置文件"
+      - "/xiuzhenadmin backup - 创建数据备份"
+      - "/xiuzhenadmin reset <玩家> - 重置玩家数据"
+    tips:
+      - "使用 TAB 键可以获得智能命令补全"
+      - "骑乘盔甲架可以自动开始冥想获得修为加成"
+      - "保持静止修炼效果更佳"
+      - "使用 /summon armor_stand ~ ~ ~ 生成冥想盔甲架"
+
+# 兼容性设置
+compatibility:
+  # 第三方插件兼容
+  third_party:
+    # CMI 兼容
+    cmi:
+      enabled: true
+      sit_command: "cmi sit"
+      stand_command: "cmi stand"
+      
+    # EssentialsX 兼容
+    essentials:
+      enabled: true
+      sit_command: "e sit"
+      stand_command: "e stand"
+      
+    # 通用坐下插件兼容
+    sit:
+      enabled: true
+      sit_command: "sit"
+      stand_command: "stand"
+
+# 其他配置可以在这里添加

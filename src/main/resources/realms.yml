@@ -1,0 +1,68 @@
+# 境界配置文件
+
+realms:
+  LianQi:
+    display_name: "炼气"
+    level: 1
+    permission: "simplexiuzhen.realm.lianqi"
+    sub_levels:
+      - name: "一层"
+        required_exp: 0
+      - name: "二层"
+        required_exp: 50
+      - name: "三层"
+        required_exp: 150
+      - name: "四层"
+        required_exp: 300
+      - name: "五层"
+        required_exp: 500
+      - name: "六层"
+        required_exp: 800
+      - name: "七层"
+        required_exp: 1200
+      - name: "八层"
+        required_exp: 1700
+      - name: "九层"
+        required_exp: 2300
+      
+  ZhuJi:
+    display_name: "筑基"
+    level: 2
+    permission: "simplexiuzhen.realm.zhujie"
+    sub_levels:
+      - name: "初期"
+        required_exp: 0
+      - name: "中期"
+        required_exp: 1000
+      - name: "后期"
+        required_exp: 2500
+      - name: "圆满"
+        required_exp: 4500
+        
+  JinDan:
+    display_name: "金丹"
+    level: 3
+    permission: "simplexiuzhen.realm.jindan"
+    sub_levels:
+      - name: "初期"
+        required_exp: 0
+      - name: "中期"
+        required_exp: 2000
+      - name: "后期"
+        required_exp: 5000
+      - name: "圆满"
+        required_exp: 9000
+        
+  YuanYing:
+    display_name: "元婴"
+    level: 4
+    permission: "simplexiuzhen.realm.yuanying"
+    sub_levels:
+      - name: "初期"
+        required_exp: 0
+      - name: "中期"
+        required_exp: 5000
+      - name: "后期"
+        required_exp: 12000
+      - name: "圆满"
+        required_exp: 22000

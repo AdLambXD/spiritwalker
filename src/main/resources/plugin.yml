@@ -1,0 +1,30 @@
+name: SimpleXiuzhen
+version: '${project.version}'
+main: com.adlamb.simplexiuzhen.SimpleXiuzhen
+api-version: 1.20
+author: adlamb
+description: 简单的修仙系统插件
+
+commands:
+  xiuzhen:
+    description: 修仙系统主命令
+    usage: /xiuzhen [meditate|stats|top|info]
+    permission: simplexiuzhen.use
+    aliases: [xz, xiuxian]
+    tab-complete: true
+    
+  xiuzhenadmin:
+    description: 修仙系统管理员命令
+    usage: /xiuzhenadmin [setrealm|addexp|reloadconfig|backup]
+    permission: simplexiuzhen.admin
+    aliases: [xza, xzadmin]
+    tab-complete: true
+
+permissions:
+  simplexiuzhen.use:
+    description: 使用修仙系统命令的权限
+    default: true
+    
+  simplexiuzhen.admin:
+    description: 使用修仙系统管理员命令的权限
+    default: op
