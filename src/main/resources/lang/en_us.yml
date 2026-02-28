@@ -1,0 +1,120 @@
+# English Language File
+
+# Player Commands Messages
+messages:
+  # Basic Messages
+  player_only: "&cOnly players can use this command!"
+  unknown_subcommand: "&cUnknown subcommand! Use /xiuzhen for help"
+  no_permission: "&cYou don't have permission to use this command!"
+  
+  # Meditation Related
+  meditate_start: "&aStarted meditation practice!"
+  meditate_start_tip: "&eStay still to gain cultivation experience..."
+  meditate_stop: "&cStopped meditation practice."
+  meditate_interrupt: "&cYou moved, meditation interrupted!"
+  meditate_actionbar: "&aMeditating... (+{gain} exp)"
+  meditate_sitting_actionbar: "&aSitting meditation... (+{gain} exp)"
+  meditate_riding_actionbar: "&aRiding meditation... (+{gain} exp)"
+  
+  # Status Display
+  stats_title: "&6=== Cultivation Status ==="
+  stats_realm: "&bRealm: &f{realm}{sublevel}"
+  stats_exp: "&bExperience: &f{current}/{required}"
+  stats_exp_max: "&bExperience: &f{current} (&aMax Level&f)"
+  stats_status_meditating: "&bStatus: &aMeditating"
+  stats_status_not_meditating: "&bStatus: &cNot Meditating"
+  stats_attribute_bonus: "&dAttribute Bonuses:"
+  stats_health_bonus: "  &f+ {amount} Maximum Health"
+  stats_mana_bonus: "  &f+ {amount} Maximum Mana"
+  
+  # Realm Information
+  realm_info_title: "&6=== Realm System Introduction ==="
+  realm_info_entry: "&b{realm} (Level {level})"
+  realm_info_sublevel: "  &f- {name}: Requires {exp} experience"
+  realm_info_sublevel_failed: "  &cFailed to read sublevel info"
+  realm_info_tip: "&eUse /xiuzhen stats to view personal status"
+  
+  # Rankings
+  ranking_title: "&6=== Cultivation Rankings (Page {page}) ==="
+  ranking_entry: "&a{rank}. &f{player} &7- &b{realm}{sublevel} &7(&f{exp} exp&7)"
+  ranking_empty: "&cNo data available"
+  ranking_page_invalid: "&cPage number must be a positive integer!"
+  
+  # Help Information
+  help_title: "&6=== Cultivation System Command Help ==="
+  help_player_base: "&b/xiuzhen &f- View basic information"
+  help_player_meditate: "&b/xiuzhen meditate &f- Start/stop meditation"
+  help_player_stats: "&b/xiuzhen stats &f- View detailed status"
+  help_player_top: "&b/xiuzhen top [page] &f- View rankings"
+  help_player_info: "&b/xiuzhen info &f- View realm introduction"
+  help_admin_title: "&cAdmin Commands:"
+  help_admin_setrealm: "&c/xiuzhenadmin setrealm <player> <realm> &f- Set player realm"
+  help_admin_addexp: "&c/xiuzhenadmin addexp <player> <exp> &f- Add experience"
+  help_admin_reload: "&c/xiuzhenadmin reloadconfig &f- Reload configuration"
+  help_admin_backup: "&c/xiuzhenadmin backup &f- Create data backup"
+  help_admin_reset: "&c/xiuzhenadmin reset <player> &f- Reset player data"
+  help_aliases: "&7Aliases: /xz, /xiuxian"
+  help_admin_aliases: "&7Aliases: /xza, /xzadmin"
+  help_tab_complete: "&7Use TAB key for smart command completion"
+  
+  # Error Messages
+  error_page_number: "&cPage number must be numeric!"
+  error_player_not_found: "&cPlayer {player} is not online!"
+  error_player_never_joined: "&cPlayer {player} has never joined the server!"
+  error_invalid_realm: "&cRealm {realm} does not exist!"
+  error_invalid_exp: "&cExperience value must be a positive number!"
+  error_config_reload: "&cConfiguration reload failed: {error}"
+  error_data_reset: "&cData reset failed: {error}"
+  error_backup: "&cBackup failed: {error}"
+  
+  # Success Messages
+  success_config_reload: "&aConfiguration files reloaded successfully!"
+  success_config_reload_detail: "&eCurrent storage type: {storage}"
+  success_data_reset: "&aReset all cultivation data for player {player}"
+  success_backup: "&aData backup completed: {backup}"
+  success_backup_location: "&eBackup location: {location}"
+  success_realm_set: "&aSet player {player}'s realm to {realm}"
+  success_exp_added: "&aAdded {exp} experience points to player {player}"
+  
+  # Admin Notifications
+  admin_realm_set_target: "&6Admin has set your realm to {realm}"
+  admin_exp_added_target: "&6Admin added {exp} experience points to you"
+  admin_data_reset_target: "&cYour cultivation data has been reset by admin"
+  
+  # Meditation Related
+  meditation_start_riding: "&aYou're riding a meditation armor stand, automatically entering meditation state!"
+  meditation_start_riding_tip: "&eStay still to gain experience bonus..."
+  meditation_stop_riding: "&cYou left the meditation armor stand, meditation state ended."
+  meditation_interrupt_move: "&cMovement interrupted meditation practice!"
+  
+  # Monster Kill
+  mob_kill_exp_gain: "&aKilled {mob} and gained {exp} experience points!"
+  
+  # Interactive Elements
+  interactive_stop_meditate: "&6[Click to Stop Meditation]"
+  interactive_stop_meditate_hover: "Click to stop meditation immediately"
+  interactive_start_meditate: "&a[Start Meditation]"
+  interactive_start_meditate_hover: "Start practicing to gain experience"
+  interactive_view_rankings: "&b[View Rankings]"
+  interactive_view_rankings_hover: "View server cultivation rankings"
+  interactive_menu_title: "&7--- Quick Actions ---"
+
+# System Messages
+system:
+  plugin_enabled: "SimpleXiuzhen plugin enabled!"
+  plugin_disabled: "SimpleXiuzhen plugin disabled!"
+  data_saved: "Auto-saved all player data completed"
+  compatible_plugins: "Compatible plugins: {plugins}"
+  
+# Color Code Reference
+# &0 Black     &8 Dark Gray
+# &1 Dark Blue &9 Blue
+# &2 Dark Green &a Green
+# &3 Dark Aqua &b Aqua
+# &4 Dark Red  &c Red
+# &5 Dark Purple &d Light Purple
+# &6 Gold      &e Yellow
+# &7 Gray      &f White
+# &k Random    &l Bold
+# &m Strikethrough &n Underline
+# &o Italic    &r Reset

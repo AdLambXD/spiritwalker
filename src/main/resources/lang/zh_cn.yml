@@ -1,0 +1,121 @@
+# 简体中文语言文件
+# Simplified Chinese Language File
+
+# 玩家命令消息
+messages:
+  # 基础消息
+  player_only: "&c只有玩家可以使用此命令！"
+  unknown_subcommand: "&c未知的子命令！使用 /xiuzhen 查看帮助"
+  no_permission: "&c你没有权限使用此命令！"
+  
+  # 打坐相关
+  meditate_start: "&a开始打坐修炼！"
+  meditate_start_tip: "&e保持静止以获得修为..."
+  meditate_stop: "&c停止打坐修炼。"
+  meditate_interrupt: "&c你移动了，打坐被打断！"
+  meditate_actionbar: "&a打坐修炼中... (+{gain} 修为)"
+  meditate_sitting_actionbar: "&a坐着修炼中... (+{gain} 修为)"
+  meditate_riding_actionbar: "&a骑乘冥想中... (+{gain} 修为)"
+  
+  # 状态显示
+  stats_title: "&6=== 修仙详细状态 ==="
+  stats_realm: "&b境界: &f{realm}{sublevel}"
+  stats_exp: "&b修为: &f{current}/{required}"
+  stats_exp_max: "&b修为: &f{current} (&a已满级&f)"
+  stats_status_meditating: "&b状态: &a打坐中"
+  stats_status_not_meditating: "&b状态: &c未打坐"
+  stats_attribute_bonus: "&d属性加成:"
+  stats_health_bonus: "  &f+ {amount} 最大生命值"
+  stats_mana_bonus: "  &f+ {amount} 最大灵力"
+  
+  # 境界信息
+  realm_info_title: "&6=== 境界体系介绍 ==="
+  realm_info_entry: "&b{realm} (等级 {level})"
+  realm_info_sublevel: "  &f- {name}: 需要修为 {exp}"
+  realm_info_sublevel_failed: "  &c段位信息读取失败"
+  realm_info_tip: "&e使用 /xiuzhen stats 查看个人状态"
+  
+  # 排行榜
+  ranking_title: "&6=== 修仙排行榜 (第{page}页) ==="
+  ranking_entry: "&a{rank}. &f{player} &7- &b{realm}{sublevel} &7(&f{exp}修为&7)"
+  ranking_empty: "&c暂无数据"
+  ranking_page_invalid: "&c页码必须是正整数！"
+  
+  # 帮助信息
+  help_title: "&6=== 修仙系统命令帮助 ==="
+  help_player_base: "&b/xiuzhen &f- 查看基本信息"
+  help_player_meditate: "&b/xiuzhen meditate &f- 开始/停止打坐"
+  help_player_stats: "&b/xiuzhen stats &f- 查看详细状态"
+  help_player_top: "&b/xiuzhen top [页码] &f- 查看排行榜"
+  help_player_info: "&b/xiuzhen info &f- 查看境界介绍"
+  help_admin_title: "&c管理员命令:"
+  help_admin_setrealm: "&c/xiuzhenadmin setrealm <玩家> <境界> &f- 设置玩家境界"
+  help_admin_addexp: "&c/xiuzhenadmin addexp <玩家> <修为> &f- 添加修为"
+  help_admin_reload: "&c/xiuzhenadmin reloadconfig &f- 重载配置"
+  help_admin_backup: "&c/xiuzhenadmin backup &f- 创建数据备份"
+  help_admin_reset: "&c/xiuzhenadmin reset <玩家> &f- 重置玩家数据"
+  help_aliases: "&7别名: /xz, /xiuxian"
+  help_admin_aliases: "&7别名: /xza, /xzadmin"
+  help_tab_complete: "&7使用 TAB 键可获得智能命令补全"
+  
+  # 错误消息
+  error_page_number: "&c页码必须是数字！"
+  error_player_not_found: "&c玩家 {player} 不在线！"
+  error_player_never_joined: "&c玩家 {player} 从未加入过服务器！"
+  error_invalid_realm: "&c境界 {realm} 不存在！"
+  error_invalid_exp: "&c修为值必须是大于0的数字！"
+  error_config_reload: "&c配置重载失败: {error}"
+  error_data_reset: "&c数据重置失败: {error}"
+  error_backup: "&c备份失败: {error}"
+  
+  # 成功消息
+  success_config_reload: "&a配置文件重载成功！"
+  success_config_reload_detail: "&e当前存储类型: {storage}"
+  success_data_reset: "&a已重置玩家 {player} 的所有修仙数据"
+  success_backup: "&a数据备份完成: {backup}"
+  success_backup_location: "&e备份位置: {location}"
+  success_realm_set: "&a已将玩家 {player} 的境界设置为 {realm}"
+  success_exp_added: "&a已为玩家 {player} 添加 {exp} 点修为"
+  
+  # 管理员通知
+  admin_realm_set_target: "&6管理员已将你的境界设置为 {realm}"
+  admin_exp_added_target: "&6管理员为你增加了 {exp} 点修为"
+  admin_data_reset_target: "&c你的修仙数据已被管理员重置"
+  
+  # 冥想相关
+  meditation_start_riding: "&a你骑乘着冥想盔甲架，自动进入打坐状态！"
+  meditation_start_riding_tip: "&e保持静止以获得修为加成..."
+  meditation_stop_riding: "&c你离开了冥想盔甲架，打坐状态结束。"
+  meditation_interrupt_move: "&c移动中断了打坐修炼！"
+  
+  # 怪物击杀
+  mob_kill_exp_gain: "&a击杀{mob}获得 {exp} 点修为！"
+  
+  # 交互式元素
+  interactive_stop_meditate: "&6[点击停止打坐]"
+  interactive_stop_meditate_hover: "点击立即停止打坐"
+  interactive_start_meditate: "&a[开始打坐]"
+  interactive_start_meditate_hover: "开始修炼获得修为"
+  interactive_view_rankings: "&b[查看排行]"
+  interactive_view_rankings_hover: "查看服务器修仙排行榜"
+  interactive_menu_title: "&7--- 快捷操作 ---"
+
+# 系统消息
+system:
+  plugin_enabled: "SimpleXiuzhen 插件已启用！"
+  plugin_disabled: "SimpleXiuzhen 插件已禁用！"
+  data_saved: "自动保存所有玩家数据完成"
+  compatible_plugins: "兼容插件: {plugins}"
+  
+# 颜色代码参考
+# &0 黑色    &8 深灰色
+# &1 深蓝色  &9 蓝色
+# &2 深绿色  &a 绿色
+# &3 深青色  &b 青色
+# &4 深红色  &c 红色
+# &5 深紫色  &d 粉色
+# &6 金色    &e 黄色
+# &7 灰色    &f 白色
+# &k 随机字符 &l 粗体
+# &m 删除线  &n 下划线
+# &o 斜体    &r 重置格式

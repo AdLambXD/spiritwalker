@@ -37,7 +37,7 @@ public class XiuzhenCommand implements CommandExecutor, TabCompleter {
     
     // 主命令列表
     private static final List<String> MAIN_COMMANDS = Arrays.asList(
-        "meditate", "stats", "top", "info"
+        "meditate", "stats", "top", "info", "ui"
     );
     
     // 数字参数（用于分页）
@@ -66,6 +66,8 @@ public class XiuzhenCommand implements CommandExecutor, TabCompleter {
                 return handleTop(sender, args);
             case "info":
                 return handleInfo(sender, args);
+            case "ui":
+                return handleUI(sender, args);
             default:
                 sender.sendMessage(ChatColor.RED + "未知的子命令！使用 /xiuzhen 查看帮助");
                 return true;
@@ -82,6 +84,9 @@ public class XiuzhenCommand implements CommandExecutor, TabCompleter {
             switch (args[0].toLowerCase()) {
                 case "top":
                     return filterCompletions(NUMBER_ARGS, args[1]);
+                case "ui":
+                    // ui命令不需要额外参数
+                    return Collections.emptyList();
                 default:
                     return Collections.emptyList();
             }
@@ -209,6 +214,20 @@ public class XiuzhenCommand implements CommandExecutor, TabCompleter {
         }
         
         sender.sendMessage(ChatColor.YELLOW + "使用 /xiuzhen stats 查看个人状态");
+        return true;
+    }
+    
+    /**
+     * 处理UI界面命令
+     */
+    private boolean handleUI(CommandSender sender, String[] args) {
+        if (!(sender instanceof Player)) {
+            sender.sendMessage(ChatColor.RED + "只有玩家可以使用此命令！");
+            return true;
+        }
+        
+        Player player = (Player) sender;
+        plugin.getChestUIManager().openPlayerInfoPanel(player);
         return true;
     }
 

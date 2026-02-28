@@ -25,9 +25,11 @@ import com.adlamb.simplexiuzhen.commands.XiuzhenCommand;
 import com.adlamb.simplexiuzhen.database.DatabaseManager;
 import com.adlamb.simplexiuzhen.database.PlayerDataDAO;
 import com.adlamb.simplexiuzhen.integration.ThirdPartyIntegration;
+import com.adlamb.simplexiuzhen.lang.LanguageManager;
 import com.adlamb.simplexiuzhen.listeners.MobKillListener;
 import com.adlamb.simplexiuzhen.listeners.RideMeditationListener;
 import com.adlamb.simplexiuzhen.permissions.XiuzhenPermissions;
+import com.adlamb.simplexiuzhen.ui.ChestUIManager;
 
 /**
  * 主类 - 修仙系统插件
@@ -40,6 +42,8 @@ public class SimpleXiuzhen extends JavaPlugin implements CommandExecutor, Listen
     private MobKillListener mobKillListener;
     private ThirdPartyIntegration thirdPartyIntegration;
     private XiuzhenPermissions permissionsManager;
+    private LanguageManager languageManager;
+    private ChestUIManager chestUIManager;
     private Map<UUID, PlayerData> playerDataMap = new HashMap<>();
     private BukkitTask cultivationTask;
     private BukkitTask autoSaveTask;
@@ -57,6 +61,12 @@ public class SimpleXiuzhen extends JavaPlugin implements CommandExecutor, Listen
         
         // 初始化权限管理器
         permissionsManager = new XiuzhenPermissions(this);
+        
+        // 初始化语言管理器
+        languageManager = new LanguageManager(this);
+        
+        // 初始化箱子UI管理器
+        chestUIManager = new ChestUIManager(this);
         
         // 初始化骑乘冥想监听器
         rideMeditationListener = new RideMeditationListener(this);
@@ -87,8 +97,8 @@ public class SimpleXiuzhen extends JavaPlugin implements CommandExecutor, Listen
         // 启动自动保存任务
         startAutoSaveTask();
 
-        getLogger().info("SimpleXiuzhen 插件已启用！");
-        getLogger().info("兼容插件: " + thirdPartyIntegration.getEnabledPlugins());
+        getLogger().info(languageManager.getSystemMessage("plugin_enabled"));
+        getLogger().info(languageManager.getSystemMessage("compatible_plugins", "plugins", thirdPartyIntegration.getEnabledPlugins()));
     }
 
     @Override
@@ -113,7 +123,7 @@ public class SimpleXiuzhen extends JavaPlugin implements CommandExecutor, Listen
             autoSaveTask.cancel();
         }
 
-        getLogger().info("SimpleXiuzhen 插件已禁用！");
+        getLogger().info(languageManager.getSystemMessage("plugin_disabled"));
     }
 
     /**
@@ -181,7 +191,7 @@ public class SimpleXiuzhen extends JavaPlugin implements CommandExecutor, Listen
             @Override
             public void run() {
                 saveAllPlayerData();
-                getLogger().info("自动保存所有玩家数据完成");
+                getLogger().info(languageManager.getSystemMessage("data_saved"));
             }
         }.runTaskTimer(this, intervalTicks, intervalTicks);
     }
@@ -324,8 +334,12 @@ public class SimpleXiuzhen extends JavaPlugin implements CommandExecutor, Listen
         return rideMeditationListener;
     }
     
-    public XiuzhenPermissions getPermissionsManager() {
-        return permissionsManager;
+    public LanguageManager getLanguageManager() {
+        return languageManager;
+    }
+    
+    public ChestUIManager getChestUIManager() {
+        return chestUIManager;
     }
     
     /**
