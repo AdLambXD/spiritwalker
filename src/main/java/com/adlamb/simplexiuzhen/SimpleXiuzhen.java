@@ -29,7 +29,9 @@ import com.adlamb.simplexiuzhen.lang.LanguageManager;
 import com.adlamb.simplexiuzhen.listeners.MobKillListener;
 import com.adlamb.simplexiuzhen.listeners.RideMeditationListener;
 import com.adlamb.simplexiuzhen.permissions.XiuzhenPermissions;
-import com.adlamb.simplexiuzhen.ui.ChestUIManager;
+import com.adlamb.simplexiuzhen.placeholder.XiuzhenPlaceholderExpansion;
+
+
 
 /**
  * 主类 - 修仙系统插件
@@ -43,7 +45,6 @@ public class SimpleXiuzhen extends JavaPlugin implements CommandExecutor, Listen
     private ThirdPartyIntegration thirdPartyIntegration;
     private XiuzhenPermissions permissionsManager;
     private LanguageManager languageManager;
-    private ChestUIManager chestUIManager;
     private Map<UUID, PlayerData> playerDataMap = new HashMap<>();
     private BukkitTask cultivationTask;
     private BukkitTask autoSaveTask;
@@ -64,9 +65,6 @@ public class SimpleXiuzhen extends JavaPlugin implements CommandExecutor, Listen
         
         // 初始化语言管理器
         languageManager = new LanguageManager(this);
-        
-        // 初始化箱子UI管理器
-        chestUIManager = new ChestUIManager(this);
         
         // 初始化骑乘冥想监听器
         rideMeditationListener = new RideMeditationListener(this);
@@ -99,6 +97,9 @@ public class SimpleXiuzhen extends JavaPlugin implements CommandExecutor, Listen
 
         getLogger().info(languageManager.getSystemMessage("plugin_enabled"));
         getLogger().info(languageManager.getSystemMessage("compatible_plugins", "plugins", thirdPartyIntegration.getEnabledPlugins()));
+        
+        // 注册PlaceholderAPI扩展
+        registerPlaceholders();
     }
 
     @Override
@@ -338,9 +339,19 @@ public class SimpleXiuzhen extends JavaPlugin implements CommandExecutor, Listen
         return languageManager;
     }
     
-    public ChestUIManager getChestUIManager() {
-        return chestUIManager;
+    /**
+     * 注册PlaceholderAPI扩展
+     */
+    private void registerPlaceholders() {
+        if (getServer().getPluginManager().getPlugin("PlaceholderAPI") != null) {
+            new XiuzhenPlaceholderExpansion(this).register();
+            getLogger().info("PlaceholderAPI扩展注册成功！");
+        } else {
+            getLogger().info("未检测到PlaceholderAPI，跳过扩展注册");
+        }
     }
+    
+
     
     /**
      * 从内存中移除玩家数据（用于重置功能）

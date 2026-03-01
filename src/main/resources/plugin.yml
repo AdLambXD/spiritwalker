@@ -8,7 +8,7 @@ description: 简单的修仙系统插件
 commands:
   xiuzhen:
     description: 修仙系统主命令
-    usage: /xiuzhen [meditate|stats|top|info|ui]
+    usage: /xiuzhen [meditate|stats|top|info]
     permission: simplexiuzhen.use
     aliases: [xz, xiuxian]
     tab-complete: true

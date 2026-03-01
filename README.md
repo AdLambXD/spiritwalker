@@ -2,7 +2,9 @@
 
 [![Paper](https://img.shields.io/badge/Paper-1.20.4-blue.svg)](https://papermc.io/)
 [![Java](https://img.shields.io/badge/Java-17+-orange.svg)](https://adoptium.net/)
+[![Build Status](https://github.com/yourusername/simplexiuzhen/actions/workflows/build.yml/badge.svg)](https://github.com/yourusername/simplexiuzhen/actions)
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
+[![Release](https://img.shields.io/github/release/yourusername/simplexiuzhen.svg)](https://github.com/yourusername/simplexiuzhen/releases)
 
 一个功能完整、高度可配置的Minecraft修仙系统插件，为您的服务器带来沉浸式的修仙体验。
 
@@ -18,6 +20,8 @@
 - **交互式操作** - 点击按钮控制打坐状态
 - **实时信息** - 境界、修为、属性一目了然
 - **美观布局** - 装饰性边框和清晰分区
+- **使用说明** - 内置操作指引和提示信息
+- **严格防护** - 完善的点击和拖拽事件拦截机制
 
 ### 多语言支持 🌍
 - **简体中文** (zh_cn) - 默认语言
@@ -28,18 +32,26 @@
 - **细分段位**：每个境界包含多个修炼段位
 - **渐进式成长**：平衡的修为需求曲线
 
-### 🛡️ 企业级功能
-- **双重存储支持**：YAML轻量级 / MySQL高性能
-- **完善的权限系统**：细粒度权限控制
-- **管理员工具**：数据管理 + 配置热重载 + 备份恢复
+### 🔧 强大的扩展支持
+- **PlaceholderAPI集成** - 丰富的占位符支持
+- **多语言系统** - 简体中文和英文双语支持
+- **权限系统** - 完善的权限节点管理
+- **配置热重载** - 在线修改配置无需重启
 
 ## 🚀 快速开始
 
+### 自动构建 (推荐)
+本项目支持GitHub Actions自动构建：
+- 每次推送代码自动构建最新版本
+- 发布标签时自动创建Release
+- 构建产物可在Actions页面下载
+
 ### 安装步骤
-1. 下载最新版本的 `SimpleXiuzhen-x.x.x.jar`
-2. 将文件放入服务器 `plugins` 目录
-3. 重启服务器或使用 `/plugman reload SimpleXiuzhen`
-4. 插件将自动生成配置文件
+1. **从Release下载**：访问 [Releases页面](https://github.com/yourusername/simplexiuzhen/releases) 下载最新版本
+2. **手动构建**：克隆仓库后运行 `mvn clean package`
+3. 将生成的 `target/SimpleXiuzhen-*.jar` 文件放入服务器 `plugins` 目录
+4. 重启服务器或使用 `/plugman reload SimpleXiuzhen`
+5. 插件将自动生成配置文件
 
 ### 基础使用
 ```bash
