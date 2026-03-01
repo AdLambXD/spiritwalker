@@ -1,0 +1,67 @@
+name: Build Minecraft Plugin
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    
+    strategy:
+      matrix:
+        java-version: [ 21 ]
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Set up JDK ${{ matrix.java-version }}
+      uses: actions/setup-java@v4
+      with:
+        java-version: ${{ matrix.java-version }}
+        distribution: 'temurin'
+        cache: 'maven'
+    
+    - name: Setup Maven
+      uses: stCarolas/setup-maven@v5
+      with:
+        maven-version: 3.9.5
+    
+    - name: Build with Maven
+      run: mvn -B clean package --file pom.xml
+      
+    - name: Upload build artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: SimpleXiuzhen-plugin
+        path: target/SimpleXiuzhen-*.jar
+        if-no-files-found: error
+        
+    - name: Create Release (on tag)
+      if: startsWith(github.ref, 'refs/tags/')
+      uses: softprops/action-gh-release@v1
+      with:
+        files: target/SimpleXiuzhen-*.jar
+        body: |
+          自动构建的修仙插件发布版本
+          
+          ## 功能特性
+          - 完整的修仙境界系统
+          - 修为浮点数精确计算
+          - 骑乘盔甲架打坐功能
+          - 怪物击杀获得修为
+          - 数据库持久化支持
+          - PlaceholderAPI集成
+          - 多语言支持
+          
+          ## 使用说明
+          1. 将插件jar文件放入服务器plugins目录
+          2. 重启服务器
+          3. 使用 `/xiuzhen` 命令开始修仙之旅
+          
+          更多详情请查看README.md
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
