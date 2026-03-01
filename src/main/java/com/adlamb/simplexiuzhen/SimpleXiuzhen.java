@@ -20,10 +20,13 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
 
+import com.adlamb.simplexiuzhen.commands.WushuCommand;
 import com.adlamb.simplexiuzhen.commands.XiuzhenAdminCommand;
 import com.adlamb.simplexiuzhen.commands.XiuzhenCommand;
 import com.adlamb.simplexiuzhen.database.DatabaseManager;
 import com.adlamb.simplexiuzhen.database.PlayerDataDAO;
+import com.adlamb.simplexiuzhen.gui.GuiListener;
+import com.adlamb.simplexiuzhen.gui.GuiManager;
 import com.adlamb.simplexiuzhen.integration.ThirdPartyIntegration;
 import com.adlamb.simplexiuzhen.lang.LanguageManager;
 import com.adlamb.simplexiuzhen.listeners.MobKillListener;
@@ -45,7 +48,11 @@ public class SimpleXiuzhen extends JavaPlugin implements CommandExecutor, Listen
     private ThirdPartyIntegration thirdPartyIntegration;
     private XiuzhenPermissions permissionsManager;
     private LanguageManager languageManager;
+    private EnhancedKungFuManager enhancedKungFuManager;
+    private GuiManager guiManager;
+    private BreakthroughSystem breakthroughSystem;
     private Map<UUID, PlayerData> playerDataMap = new HashMap<>();
+    private Map<UUID, EnhancedPlayerData> enhancedPlayerDataMap = new HashMap<>();
     private BukkitTask cultivationTask;
     private BukkitTask autoSaveTask;
 
@@ -66,6 +73,15 @@ public class SimpleXiuzhen extends JavaPlugin implements CommandExecutor, Listen
         // 初始化语言管理器
         languageManager = new LanguageManager(this);
         
+        // 初始化功法管理器
+        enhancedKungFuManager = new EnhancedKungFuManager(this);
+        
+        // 初始化GUI管理器
+        guiManager = new GuiManager(this);
+        
+        // 初始化突破系统
+        breakthroughSystem = new BreakthroughSystem(this);
+        
         // 初始化骑乘冥想监听器
         rideMeditationListener = new RideMeditationListener(this);
         
@@ -76,15 +92,19 @@ public class SimpleXiuzhen extends JavaPlugin implements CommandExecutor, Listen
         thirdPartyIntegration = new ThirdPartyIntegration(this);
         Bukkit.getPluginManager().registerEvents(rideMeditationListener, this);
         Bukkit.getPluginManager().registerEvents(mobKillListener, this);
+        Bukkit.getPluginManager().registerEvents(new GuiListener(this), this);
 
         // 注册命令和TAB补全
         XiuzhenCommand xiuzhenCommand = new XiuzhenCommand(this);
         XiuzhenAdminCommand xiuzhenAdminCommand = new XiuzhenAdminCommand(this);
+        WushuCommand wushuCommand = new WushuCommand(this);
         
         getCommand("xiuzhen").setExecutor(xiuzhenCommand);
         getCommand("xiuzhen").setTabCompleter(xiuzhenCommand);
         getCommand("xiuzhenadmin").setExecutor(xiuzhenAdminCommand);
         getCommand("xiuzhenadmin").setTabCompleter(xiuzhenAdminCommand);
+        getCommand("wushu").setExecutor(wushuCommand);
+        getCommand("wushu").setTabCompleter(wushuCommand);
 
         // 注册事件监听器
         Bukkit.getPluginManager().registerEvents(this, this);
@@ -137,23 +157,30 @@ public class SimpleXiuzhen extends JavaPlugin implements CommandExecutor, Listen
                 for (Player player : Bukkit.getOnlinePlayers()) {
                     UUID playerId = player.getUniqueId();
                     PlayerData playerData = getPlayerData(playerId);
+                    EnhancedPlayerData enhancedPlayerData = getEnhancedPlayerData(playerId);
                     
-                    // 检查玩家是否在打坐或坐下
+                    // 检查玩家状态
                     boolean isMeditating = playerData.isMeditating();
                     boolean isRiding = rideMeditationListener.isPlayerRiding(playerId);
+                    boolean isInCombatTraining = enhancedPlayerData.isInCombatTraining();
+                    boolean isInCombat = enhancedPlayerData.isInCombat();
                     
-                    // 修为增长条件：打坐状态或骑乘冥想状态
-                    if (isMeditating || isRiding) {
+                    // 修为增长条件：打坐状态、骑乘冥想状态或战斗训练状态
+                    boolean canGainXiuzhenExp = isMeditating || isRiding;
+                    boolean canGainWushuExp = isInCombatTraining || isInCombat;
+                    
+                    // 修仙系统修为增长
+                    if (canGainXiuzhenExp) {
                         // 检查是否移动过多（仅对打坐状态严格检查）
-                        boolean canGainExp = true;
+                        boolean canProceed = true;
                         if (isMeditating && playerData.hasMoved(player.getLocation())) {
-                            canGainExp = false;
+                            canProceed = false;
                             // 通知玩家因为移动而中断打坐
-                            player.sendActionBar(ChatColor.RED + "移动中断了打坐修炼！");
+                            player.sendActionBar(languageManager.getPlayerMessage("meditate_interrupt"));
                         }
                         
-                        if (canGainExp) {
-                            // 计算修为增益
+                        if (canProceed) {
+                            // 计算修仙修为增益
                             double baseGain = configManager.getBaseGainPerSecond();
                             double multiplier = 1.0;
                             
@@ -164,6 +191,7 @@ public class SimpleXiuzhen extends JavaPlugin implements CommandExecutor, Listen
                             
                             double gain = baseGain * multiplier;
                             playerData.addExp(gain);
+                            enhancedPlayerData.addXiuzhenExp(gain);
                             
                             // 播放粒子效果
                             playMeditationParticles(player);
@@ -173,10 +201,32 @@ public class SimpleXiuzhen extends JavaPlugin implements CommandExecutor, Listen
                             
                             // 显示增益信息
                             String actionMessage = isRiding ? 
-                                ChatColor.GREEN + "骑乘冥想中... (+" + gain + " 修为)" :
-                                ChatColor.GREEN + "打坐修炼中... (+" + gain + " 修为)";
+                                languageManager.getPlayerMessage("meditate_riding_actionbar", "gain", gain) :
+                                languageManager.getPlayerMessage("meditate_actionbar", "gain", gain);
                             player.sendActionBar(actionMessage);
                         }
+                    }
+                    
+                    // 武者系统修为增长 - 根据用户要求：武者修为不应该自动增长，而应该只在击杀时增长
+                    // 因此移除自动增长逻辑，只保留内力消耗和恢复逻辑
+                    // 在战斗状态下消耗内力，在非战斗训练状态下恢复内力
+                    if (isInCombat) {
+                        enhancedPlayerData.consumeNeili(0.5); // 战斗中缓慢消耗内力
+                    } else if (isInCombatTraining) {
+                        // 非战斗时恢复内力（战斗训练状态也视为非战斗状态）
+                        enhancedPlayerData.recoverNeili(0.3);
+                    }
+                    
+                    // 记录战斗时间（仅在真正战斗时）
+                    if (isInCombat) {
+                        enhancedPlayerData.recordCombatTime();
+                    }
+                    
+                    // 自然资源恢复（非修炼状态时）
+                    if (!canGainXiuzhenExp && !canGainWushuExp) {
+                        // 缓慢恢复灵力和内力
+                        enhancedPlayerData.recoverLingli(0.1);
+                        enhancedPlayerData.recoverNeili(0.1);
                     }
                 }
             }
@@ -214,6 +264,19 @@ public class SimpleXiuzhen extends JavaPlugin implements CommandExecutor, Listen
             data = new PlayerData(playerId, this);
             data.loadData();
             playerDataMap.put(playerId, data);
+        }
+        return data;
+    }
+    
+    /**
+     * 获取增强版玩家数据（如果不存在则创建）
+     */
+    public EnhancedPlayerData getEnhancedPlayerData(UUID playerId) {
+        EnhancedPlayerData data = enhancedPlayerDataMap.get(playerId);
+        if (data == null) {
+            data = new EnhancedPlayerData(playerId, this);
+            data.loadData();
+            enhancedPlayerDataMap.put(playerId, data);
         }
         return data;
     }
@@ -337,6 +400,18 @@ public class SimpleXiuzhen extends JavaPlugin implements CommandExecutor, Listen
     
     public LanguageManager getLanguageManager() {
         return languageManager;
+    }
+    
+    public EnhancedKungFuManager getEnhancedKungFuManager() {
+        return enhancedKungFuManager;
+    }
+    
+    public GuiManager getGuiManager() {
+        return guiManager;
+    }
+    
+    public BreakthroughSystem getBreakthroughSystem() {
+        return breakthroughSystem;
     }
     
     /**

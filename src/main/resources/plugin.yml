@@ -8,9 +8,23 @@ description: 简单的修仙系统插件
 commands:
   xiuzhen:
     description: 修仙系统主命令
-    usage: /xiuzhen [meditate|stats|top|info]
+    usage: /xiuzhen [meditate|stats|top|info|gui]
     permission: simplexiuzhen.use
     aliases: [xz, xiuxian]
+    tab-complete: true
+    
+  wushu:
+    description: 武者系统主命令
+    usage: /wushu [train|stats|breakthrough|kungfu|info]
+    permission: simplexiuzhen.use
+    aliases: [ws, wushuxitong]
+    tab-complete: true
+    
+  status:
+    description: 查看双系统综合状态
+    usage: /status
+    permission: simplexiuzhen.use
+    aliases: [zt, zhuangtai]
     tab-complete: true
     
   xiuzhenadmin:

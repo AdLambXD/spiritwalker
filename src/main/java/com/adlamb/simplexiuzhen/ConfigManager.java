@@ -15,6 +15,7 @@ public class ConfigManager {
     private final JavaPlugin plugin;
     private FileConfiguration config;
     private FileConfiguration realmsConfig;
+    private FileConfiguration martialRealmsConfig;
 
     public ConfigManager(JavaPlugin plugin) {
         this.plugin = plugin;
@@ -31,6 +32,9 @@ public class ConfigManager {
 
         // 加载境界配置文件
         loadRealmsConfig();
+        
+        // 加载武者境界配置文件
+        loadMartialRealmsConfig();
     }
 
     /**
@@ -45,6 +49,20 @@ public class ConfigManager {
         }
         
         realmsConfig = YamlConfiguration.loadConfiguration(realmsFile);
+    }
+    
+    /**
+     * 加载武者境界配置文件
+     */
+    private void loadMartialRealmsConfig() {
+        File martialRealmsFile = new File(plugin.getDataFolder(), "martial_realms.yml");
+        
+        // 如果文件不存在，从资源中复制默认配置
+        if (!martialRealmsFile.exists()) {
+            plugin.saveResource("martial_realms.yml", false);
+        }
+        
+        martialRealmsConfig = YamlConfiguration.loadConfiguration(martialRealmsFile);
     }
 
     /**
@@ -74,6 +92,13 @@ public class ConfigManager {
     public FileConfiguration getRealmsConfig() {
         return realmsConfig;
     }
+    
+    /**
+     * 获取武者境界配置
+     */
+    public FileConfiguration getMartialRealmsConfig() {
+        return martialRealmsConfig;
+    }
 
     /**
      * 重新加载所有配置
@@ -82,5 +107,6 @@ public class ConfigManager {
         plugin.reloadConfig();
         config = plugin.getConfig();
         loadRealmsConfig();
+        loadMartialRealmsConfig();
     }
 }

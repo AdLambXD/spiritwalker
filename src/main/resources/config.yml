@@ -50,6 +50,13 @@ settings:
       YuanYing: 2.0  # 元婴
       HuaShen: 2.5   # 化神
       
+    # 武者境界修为倍数（境界越高，击杀怪物获得越多修为）
+    wushu_realm_multipliers:
+      XiuLian: 1.0   # 修炼
+      TongMai: 1.3   # 通脉
+      ZhuJing: 1.6   # 筑经
+      HuaYuan: 2.2   # 化元
+      
   data:
     # 自动保存间隔（分钟）
     auto_save_interval_minutes: 5
@@ -76,6 +83,7 @@ messages:
   help:
     player_commands:
       - "/xiuzhen - 查看基本信息和帮助"
+      - "/xiuzhen gui - 打开图形界面"
       - "/xiuzhen meditate - 开始/停止打坐修炼"
       - "/xiuzhen stats - 查看详细修仙状态"
       - "/xiuzhen top [页码] - 查看服务器排行榜"

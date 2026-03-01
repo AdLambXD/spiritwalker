@@ -19,6 +19,8 @@ SimpleXiuzhen 是一个基于 Java 和 Maven 开发的 Minecraft 修仙系统插
 - 🔧 **管理员命令** - 完善的后台管理功能
 - 🎮 **交互式UI** - 点击式操作界面
 - 🪑 **盔甲架冥想** - 骑乘盔甲架自动进入冥想状态
+- ⚔️ **功法系统** - 攻击、防御、辅助、治疗四类功法
+- 🖥️ **图形界面** - 完整的GUI系统支持
 
 ## 🏗️ 技术架构
 
@@ -28,15 +30,21 @@ src/main/java/com/adlamb/simplexiuzhen/
 ├── SimpleXiuzhen.java           # 主类 - 插件生命周期管理
 ├── ConfigManager.java           # 配置管理器
 ├── PlayerData.java              # 玩家数据模型
+├── KungFu.java                  # 功法数据模型
+├── KungFuManager.java           # 功法管理器
 ├── commands/                    # 命令处理器
 │   ├── XiuzhenCommand.java      # 玩家命令
-│   └── XiuzhenAdminCommand.java # 管理员命令
+│   ├── XiuzhenAdminCommand.java # 管理员命令
+│   └── KungFuCommand.java       # 功法命令处理器
 ├── listeners/                   # 事件监听器
 │   ├── MobKillListener.java     # 怪物击杀监听
 │   └── RideMeditationListener.java # 盔甲架冥想监听
 ├── database/                    # 数据库相关
 │   ├── DatabaseManager.java     # 数据库连接管理
 │   └── PlayerDataDAO.java       # 数据访问对象
+├── gui/                         # 图形界面系统
+│   ├── GuiManager.java          # GUI管理器
+│   └── GuiListener.java         # GUI事件监听器
 ├── integration/                 # 第三方集成
 │   └── ThirdPartyIntegration.java
 └── permissions/                 # 权限管理

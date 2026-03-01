@@ -15,13 +15,11 @@
 - **智能状态检测**：精准识别玩家修炼状态，防止作弊
 - **视觉反馈系统**：粒子效果 + ActionBar提示 + 音效反馈
 
-### 🎮 直观的图形界面
-- **箱子UI面板** - 图形化显示修仙信息
-- **交互式操作** - 点击按钮控制打坐状态
-- **实时信息** - 境界、修为、属性一目了然
-- **美观布局** - 装饰性边框和清晰分区
-- **使用说明** - 内置操作指引和提示信息
-- **严格防护** - 完善的点击和拖拽事件拦截机制
+### 🎮 双系统修炼体验
+- **修仙系统**：传统打坐 + 盔甲架冥想 + 怪物猎杀
+- **武者系统**：战斗训练 + 内力修炼 + 武技掌握
+- **智能状态检测**：精准识别玩家修炼状态，防止作弊
+- **视觉反馈系统**：粒子效果 + ActionBar提示 + 音效反馈
 
 ### 多语言支持 🌍
 - **简体中文** (zh_cn) - 默认语言
@@ -46,6 +44,24 @@
 - 发布标签时自动创建Release
 - 构建产物可在Actions页面下载
 
+### 本地构建
+```bash
+# Windows
+build-local.bat
+
+# Linux/Mac  
+./build-local.sh
+
+# 或直接使用Maven
+mvn clean package
+```
+
+### ProtocolLib集成
+由于ProtocolLib不在标准Maven仓库中, 需要手动安装:
+1. 从SpigotMC下载 ProtocolLib-5.4.0.jar
+2. 执行: `mvn install:install-file -Dfile=ProtocolLib-5.4.0.jar -DgroupId=com.comphenix.protocol -DartifactId=ProtocolLib -Dversion=5.4.0 -Dpackaging=jar`
+3. 在pom.xml中添加依赖
+
 ### 安装步骤
 1. **从Release下载**：访问 [Releases页面](https://github.com/yourusername/simplexiuzhen/releases) 下载最新版本
 2. **手动构建**：克隆仓库后运行 `mvn clean package`
@@ -55,20 +71,21 @@
 
 ### 基础使用
 ```bash
-# 查看个人信息
-/xiuzhen
+# 修仙系统命令
+/xiuzhen gui        # 打开图形界面（推荐新手使用）
+/xiuzhen            # 查看修仙系统帮助
+/xiuzhen meditate   # 开始/停止打坐修炼
+/xiuzhen stats      # 查看修仙详细状态
+/xiuzhen top        # 查看修仙排行榜
+/xiuzhen info       # 查看修仙境界体系
 
-# 打开图形界面
-/xiuzhen ui
-
-# 开始修炼
-/xiuzhen meditate
-
-# 查看排行榜
-/xiuzhen top
-
-# 了解境界体系
-/xiuzhen info
+# 武者系统命令
+/wushu              # 查看武者系统帮助
+/wushu train        # 开始/停止战斗训练
+/wushu stats        # 查看武者详细状态
+/wushu breakthrough # 尝试武者境界突破
+/wushu kungfu list  # 查看可学武者功法
+/wushu info         # 查看武者境界体系
 ```
 
 ## 🎮 游戏玩法

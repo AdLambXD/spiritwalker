@@ -12,11 +12,42 @@ messages:
   meditate_start_tip: "&eStay still to gain cultivation experience..."
   meditate_stop: "&cStopped meditation practice."
   meditate_interrupt: "&cYou moved, meditation interrupted!"
-  meditate_actionbar: "&aMeditating... (+{gain} exp)"
-  meditate_sitting_actionbar: "&aSitting meditation... (+{gain} exp)"
-  meditate_riding_actionbar: "&aRiding meditation... (+{gain} exp)"
+  meditate_actionbar: "&aMeditating... (+{gain} Cultivation Exp)"
+  meditate_sitting_actionbar: "&aSitting meditation... (+{gain} Cultivation Exp)"
+  meditate_riding_actionbar: "&aRiding meditation... (+{gain} Cultivation Exp)"
   
-  # Status Display
+  # Combat Training Related
+  combat_start: "&aStart combat training!"
+  combat_start_tip: "&eImprove martial arts cultivation and internal energy through combat..."
+  combat_stop: "&cStop combat training."
+  combat_training_actionbar: "&cCombat training... (+{gain} Martial Exp)"
+  training_actionbar: "&eTraining... (+{gain} Martial Exp)"
+  combat_interrupt: "&cNo combat for a long time, training effect weakened!"
+  
+  # Dual System Status
+  dual_system_status: "&6=== Dual System Status ==="
+  xiuzhen_status: "&bCultivation: &fRealm {realm}{sublevel} Exp {exp} Energy {lingli}/{max_lingli}"
+  wushu_status: "&cMartial: &fRealm {realm}{sublevel} Exp {exp} Internal {neili}/{max_neili}"
+  meditation_status: "&aMeditation: {status}"
+  training_status: "&cTraining: {status}"
+  
+  # Monster Kill Settings
+  mob_kill:
+    # Whether to enable gaining martial experience from killing monsters
+    enabled: true
+    
+    # Difficulty multiplier (can be adjusted according to server difficulty)
+    difficulty_multiplier: 1.0
+    
+    # Whether to show messages when gaining experience from kills
+    show_exp_message: true
+    
+    # Martial realm experience multipliers (higher realms gain more experience from kills)
+    wushu_realm_multipliers:
+      XiuLian: 1.0   # Cultivation
+      TongMai: 1.3   # Meridian Opening
+      ZhuJing: 1.6   # Meridian Construction
+      HuaYuan: 2.2   # Primordial Spirit Transformation
   stats_title: "&6=== Cultivation Status ==="
   stats_realm: "&bRealm: &f{realm}{sublevel}"
   stats_exp: "&bExperience: &f{current}/{required}"
@@ -89,6 +120,7 @@ messages:
   
   # Monster Kill
   mob_kill_exp_gain: "&aKilled {mob} and gained {exp} experience points!"
+  mob_kill_actionbar: "&cKilled {mob}... (+{gain} Martial Exp)"
   
   # Interactive Elements
   interactive_stop_meditate: "&6[Click to Stop Meditation]"
@@ -105,7 +137,7 @@ system:
   plugin_disabled: "SimpleXiuzhen plugin disabled!"
   data_saved: "Auto-saved all player data completed"
   compatible_plugins: "Compatible plugins: {plugins}"
-  
+
 # Color Code Reference
 # &0 Black     &8 Dark Gray
 # &1 Dark Blue &9 Blue

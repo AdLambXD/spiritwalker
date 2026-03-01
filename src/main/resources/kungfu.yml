@@ -1,0 +1,87 @@
+# 功法配置文件
+# 格式说明：
+# - id: 功法唯一标识
+# - name: 功法名称
+# - description: 功法描述
+# - type: 类型 (attack/defense/support/healing)
+# - level: 等级 (beginner/intermediate/advanced/master)
+# - realm_requirement: 境界要求
+# - exp_requirement: 修为要求
+# - cooldown_ticks: 冷却时间（ticks）
+# - effects: 效果列表
+
+kungfus:
+  fire_ball:
+    name: "火球术"
+    description: "释放一个火球攻击敌人，造成火焰伤害"
+    type: "attack"
+    level: "beginner"
+    realm_requirement: "LianQi"
+    exp_requirement: 100.0
+    cooldown_ticks: 60
+    effects:
+      - "damage:5"
+      - "effect:fire"
+    config:
+      range: 10.0
+      power: 1.5
+
+  lightning_strike:
+    name: "雷击术"
+    description: "召唤闪电打击目标，造成电击伤害并有几率麻痹"
+    type: "attack"
+    level: "intermediate"
+    realm_requirement: "ZhuJi"
+    exp_requirement: 500.0
+    cooldown_ticks: 120
+    effects:
+      - "damage:10"
+      - "effect:stun:2"
+    config:
+      range: 15.0
+      chance: 0.3
+
+  energy_shield:
+    name: "能量护盾"
+    description: "生成一个能量护盾，吸收一定量的伤害"
+    type: "defense"
+    level: "beginner"
+    realm_requirement: "LianQi"
+    exp_requirement: 80.0
+    cooldown_ticks: 180
+    effects:
+      - "absorb:20"
+      - "duration:10"
+    config:
+      max_absorb: 20
+      duration: 10
+
+  wind_step:
+    name: "疾风步"
+    description: "提升移动速度，持续一段时间"
+    type: "support"
+    level: "beginner"
+    realm_requirement: "LianQi"
+    exp_requirement: 60.0
+    cooldown_ticks: 240
+    effects:
+      - "speed:1.5"
+      - "duration:8"
+    config:
+      multiplier: 1.5
+      duration: 8
+
+  healing_pulse:
+    name: "治愈脉冲"
+    description: "释放治疗脉冲，恢复自身生命值"
+    type: "healing"
+    level: "beginner"
+    realm_requirement: "LianQi"
+    exp_requirement: 70.0
+    cooldown_ticks: 300
+    effects:
+      - "heal:5"
+      - "duration:1"
+    config:
+      amount: 5
+      radius: 3.0

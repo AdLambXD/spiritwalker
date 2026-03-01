@@ -1,0 +1,121 @@
+# 武者境界配置文件
+
+martial_realms:
+  XiuLian:
+    display_name: "修炼"
+    level: 1
+    permission: "simplexiuzhen.martial.xiulian"
+    sub_levels:
+      - name: "初学"
+        required_exp: 0
+        required_neili: 0
+      - name: "入门"
+        required_exp: 100
+        required_neili: 50
+      - name: "小成"
+        required_exp: 300
+        required_neili: 150
+      - name: "熟练"
+        required_exp: 600
+        required_neili: 300
+      
+  TongMai:
+    display_name: "通脉"
+    level: 2
+    permission: "simplexiuzhen.martial.tongmai"
+    sub_levels:
+      - name: "初期"
+        required_exp: 0
+        required_neili: 500
+      - name: "中期"
+        required_exp: 1000
+        required_neili: 1000
+      - name: "后期"
+        required_exp: 2000
+        required_neili: 2000
+      - name: "圆满"
+        required_exp: 3500
+        required_neili: 3500
+        
+  ZhuJing:
+    display_name: "筑经"
+    level: 3
+    permission: "simplexiuzhen.martial.zhujing"
+    sub_levels:
+      - name: "初期"
+        required_exp: 0
+        required_neili: 5000
+      - name: "中期"
+        required_exp: 2000
+        required_neili: 8000
+      - name: "后期"
+        required_exp: 5000
+        required_neili: 12000
+      - name: "圆满"
+        required_exp: 9000
+        required_neili: 18000
+        
+  HuaYuan:
+    display_name: "化元"
+    level: 4
+    permission: "simplexiuzhen.martial.huayuan"
+    sub_levels:
+      - name: "初期"
+        required_exp: 0
+        required_neili: 25000
+      - name: "中期"
+        required_exp: 5000
+        required_neili: 35000
+      - name: "后期"
+        required_exp: 12000
+        required_neili: 50000
+      - name: "圆满"
+        required_exp: 22000
+        required_neili: 75000
+
+# 内力系统配置
+neili_system:
+  # 基础内力上限
+  base_max_neili: 100
+  
+  # 每个境界段位的内力加成
+  realm_neili_bonus:
+    XiuLian: 50
+    TongMai: 200
+    ZhuJing: 500
+    HuaYuan: 1000
+    
+  # 内力恢复设置
+  recovery:
+    # 打坐时每秒恢复内力
+    meditate_recovery_per_second: 2.0
+    # 战斗时每秒消耗内力（负值表示消耗）
+    combat_drain_per_second: -1.0
+    # 自然恢复（非战斗非打坐状态）
+    natural_recovery_per_second: 0.5
+    
+  # 突破所需物品
+  breakthrough_items:
+    TongMai:
+      - item: "DIAMOND_SWORD"
+        amount: 1
+        name: "锋利之刃"
+      - item: "IRON_INGOT"
+        amount: 32
+        name: "精铁"
+        
+    ZhuJing:
+      - item: "NETHERITE_INGOT"
+        amount: 8
+        name: "玄铁"
+      - item: "ENDER_PEARL"
+        amount: 16
+        name: "虚空珍珠"
+        
+    HuaYuan:
+      - item: "NETHER_STAR"
+        amount: 1
+        name: "星辰之心"
+      - item: "DRAGON_EGG"
+        amount: 1
+        name: "龙魂"

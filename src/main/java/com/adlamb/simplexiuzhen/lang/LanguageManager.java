@@ -111,7 +111,20 @@ public class LanguageManager {
         // 怪物击杀
         DEFAULT_MESSAGES.put("messages.mob_kill_exp_gain", "&a击杀{mob}获得 {exp} 点修为！");
         
-        // 交互式元素
+        // 战斗训练相关
+        DEFAULT_MESSAGES.put("messages.combat_start", "&a开始战斗训练！");
+        DEFAULT_MESSAGES.put("messages.combat_start_tip", "&e通过战斗来提升武者修为和内力...");
+        DEFAULT_MESSAGES.put("messages.combat_stop", "&c停止战斗训练。");
+        DEFAULT_MESSAGES.put("messages.combat_training_actionbar", "&c战斗训练中... (+{gain} 武者修为)");
+        DEFAULT_MESSAGES.put("messages.training_actionbar", "&e训练中... (+{gain} 武者修为)");
+        DEFAULT_MESSAGES.put("messages.combat_interrupt", "&c长时间未战斗，训练效果减弱！");
+        
+        // 双系统状态
+        DEFAULT_MESSAGES.put("messages.dual_system_status", "&6=== 双系统状态 ===");
+        DEFAULT_MESSAGES.put("messages.xiuzhen_status", "&b修仙: &f境界 {realm}{sublevel} 修为 {exp} 灵力 {lingli}/{max_lingli}");
+        DEFAULT_MESSAGES.put("messages.wushu_status", "&c武者: &f境界 {realm}{sublevel} 修为 {exp} 内力 {neili}/{max_neili}");
+        DEFAULT_MESSAGES.put("messages.meditation_status", "&a打坐状态: {status}");
+        DEFAULT_MESSAGES.put("messages.training_status", "&c训练状态: {status}");
         DEFAULT_MESSAGES.put("messages.interactive_stop_meditate", "&6[点击停止打坐]");
         DEFAULT_MESSAGES.put("messages.interactive_stop_meditate_hover", "点击立即停止打坐");
         DEFAULT_MESSAGES.put("messages.interactive_start_meditate", "&a[开始打坐]");

@@ -9,8 +9,9 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDeathEvent;
 
-import com.adlamb.simplexiuzhen.PlayerData;
+import com.adlamb.simplexiuzhen.EnhancedPlayerData;
 import com.adlamb.simplexiuzhen.SimpleXiuzhen;
+import com.adlamb.simplexiuzhen.lang.LanguageManager;
 
 /**
  * 怪物击杀监听器
@@ -18,6 +19,7 @@ import com.adlamb.simplexiuzhen.SimpleXiuzhen;
  */
 public class MobKillListener implements Listener {
     private final SimpleXiuzhen plugin;
+    private final LanguageManager languageManager;
     
     // 不同怪物的基础修为奖励
     private static final Map<EntityType, Double> MOB_EXP_REWARDS = new HashMap<>();
@@ -73,6 +75,7 @@ public class MobKillListener implements Listener {
     
     public MobKillListener(SimpleXiuzhen plugin) {
         this.plugin = plugin;
+        this.languageManager = plugin.getLanguageManager();
     }
     
     @EventHandler
@@ -93,30 +96,37 @@ public class MobKillListener implements Listener {
             expReward *= difficultyMultiplier;
             
             // 应用境界倍数（更强的玩家获得更多修为）
-            PlayerData playerData = plugin.getPlayerData(player.getUniqueId());
-            double realmMultiplier = getRealmMultiplier(playerData.getCurrentRealmKey());
+            EnhancedPlayerData enhancedPlayerData = plugin.getEnhancedPlayerData(player.getUniqueId());
+            double realmMultiplier = getWushuRealmMultiplier(enhancedPlayerData.getCurrentWushuRealmKey());
             expReward *= realmMultiplier;
             
-            // 增加修为
-            playerData.addExp(expReward);
+            // 增加武者修为
+            enhancedPlayerData.addWushuExp(expReward);
+            
+            // 记录战斗状态
+            enhancedPlayerData.setInCombat(true);
             
             // 显示获得修为提示
             if (plugin.getConfig().getBoolean("settings.mob_kill.show_exp_message", true)) {
-                player.sendMessage("§a击杀 §e" + getMobDisplayName(mobType) + " §a获得 §b" + String.format("%.2f", expReward) + " §a点修为!");
+                // 修复浮点数精度问题 - 使用BigDecimal进行精确计算
+                java.math.BigDecimal bd = new java.math.BigDecimal(expReward).setScale(2, java.math.RoundingMode.HALF_UP);
+                String formattedExp = bd.toString();
+                // 显示在动作栏上，与打坐格式一致
+                String actionMessage = languageManager.getPlayerMessage("mob_kill_actionbar", "gain", formattedExp, "mob", getMobDisplayName(mobType));
+                player.sendActionBar(actionMessage);
             }
         }
     }
     
     /**
-     * 根据境界获取修为倍数
+     * 根据武者境界获取修为倍数
      */
-    private double getRealmMultiplier(String realmKey) {
+    private double getWushuRealmMultiplier(String realmKey) {
         switch (realmKey) {
-            case "LianQi": return 1.0;
-            case "ZhuJi": return 1.2;
-            case "JinDan": return 1.5;
-            case "YuanYing": return 2.0;
-            case "HuaShen": return 2.5;
+            case "XiuLian": return 1.0;
+            case "TongMai": return 1.3;
+            case "ZhuJing": return 1.6;
+            case "HuaYuan": return 2.2;
             default: return 1.0;
         }
     }
