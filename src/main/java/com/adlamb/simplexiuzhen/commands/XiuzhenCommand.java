@@ -373,18 +373,4 @@ public class XiuzhenCommand implements CommandExecutor, TabCompleter {
         
         sender.sendMessage(ChatColor.GRAY + "别名: /xz, /xiuxian");
     }
-
-    /**
-     * 安全获取配置中的整数值
-     */
-    private int getConfigInt(FileConfiguration config, String path, int defaultValue) {
-        Object value = config.get(path);
-        if (value instanceof Integer) {
-            return (Integer) value;
-        } else if (value instanceof Double) {
-            return ((Double) value).intValue();
-        } else {
-            return defaultValue;
-        }
-    }
 }

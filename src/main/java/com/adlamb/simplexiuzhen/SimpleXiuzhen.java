@@ -33,6 +33,7 @@ import com.adlamb.simplexiuzhen.listeners.MobKillListener;
 import com.adlamb.simplexiuzhen.listeners.RideMeditationListener;
 import com.adlamb.simplexiuzhen.permissions.XiuzhenPermissions;
 import com.adlamb.simplexiuzhen.placeholder.XiuzhenPlaceholderExpansion;
+import com.adlamb.simplexiuzhen.utils.XiuzhenUtils;
 
 
 
@@ -343,7 +344,7 @@ public class SimpleXiuzhen extends JavaPlugin implements CommandExecutor, Listen
         
         // 获取当前段位升级所需修为
         String expRequirementPath = "realms." + playerData.getCurrentRealmKey() + ".sub_levels." + playerData.getCurrentSubLevelIndex() + ".required_exp";
-        int expRequirement = getConfigInt(realmsConfig, expRequirementPath, 0);
+        int expRequirement = XiuzhenUtils.getConfigInt(realmsConfig, expRequirementPath, 0);
         
         player.sendMessage(ChatColor.GOLD + "=== 修仙状态 ===");
         player.sendMessage(ChatColor.AQUA + "境界: " + ChatColor.WHITE + realmDisplayName + subLevelName);
@@ -367,19 +368,6 @@ public class SimpleXiuzhen extends JavaPlugin implements CommandExecutor, Listen
         }
     }
 
-    /**
-     * 安全获取配置中的整数值
-     */
-    private int getConfigInt(FileConfiguration config, String path, int defaultValue) {
-        Object value = config.get(path);
-        if (value instanceof Integer) {
-            return (Integer) value;
-        } else if (value instanceof Double) {
-            return ((Double) value).intValue();
-        } else {
-            return defaultValue;
-        }
-    }
 
     // Getter方法
     public ConfigManager getConfigManager() {
