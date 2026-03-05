@@ -25,10 +25,10 @@ public class BreakthroughSystem {
     /**
      * 检查并尝试突破修仙境界
      */
-    public boolean attemptXiuzhenBreakthrough(Player player, EnhancedPlayerData playerData) {
+    public boolean attemptXiuzhenBreakthrough(Player player, PlayerData playerData) {
         FileConfiguration realmsConfig = configManager.getRealmsConfig();
-        String currentRealm = playerData.getCurrentXiuzhenRealmKey();
-        int currentSubLevel = playerData.getCurrentXiuzhenSubLevelIndex();
+        String currentRealm = playerData.getCurrentRealmKey();
+        int currentSubLevel = playerData.getCurrentSubLevelIndex();
         
         // 获取当前境界的所有段位
         String realmPath = "realms." + currentRealm + ".sub_levels";
@@ -63,7 +63,7 @@ public class BreakthroughSystem {
     /**
      * 检查并尝试突破武者境界
      */
-    public boolean attemptWushuBreakthrough(Player player, EnhancedPlayerData playerData) {
+    public boolean attemptWushuBreakthrough(Player player, PlayerData playerData) {
         FileConfiguration martialConfig = configManager.getMartialRealmsConfig();
         String currentRealm = playerData.getCurrentWushuRealmKey();
         int currentSubLevel = playerData.getCurrentWushuSubLevelIndex();
@@ -101,7 +101,7 @@ public class BreakthroughSystem {
     /**
      * 突破到下一段位
      */
-    private boolean attemptSubLevelBreakthrough(Player player, EnhancedPlayerData playerData, 
+    private boolean attemptSubLevelBreakthrough(Player player, PlayerData playerData, 
             String systemType, String realmKey, int targetSubLevel, List<?> subLevels) {
         
         try {
@@ -128,7 +128,7 @@ public class BreakthroughSystem {
             
             // 检查修为要求
             double currentExp = "xiuzhen".equals(systemType) ? 
-                playerData.getCurrentXiuzhenExp() : playerData.getCurrentWushuExp();
+                playerData.getCurrentExp() : playerData.getCurrentWushuExp();
                 
             if (currentExp < requiredExp) {
                 player.sendMessage(ChatColor.RED + "修为不足！需要 " + requiredExp + " 点修为。");
@@ -151,7 +151,7 @@ public class BreakthroughSystem {
             
             // 执行突破
             if ("xiuzhen".equals(systemType)) {
-                playerData.setCurrentXiuzhenSubLevelIndex(targetSubLevel);
+                playerData.setCurrentSubLevelIndex(targetSubLevel);
                 player.sendMessage(ChatColor.GREEN + "恭喜你成功突破到新的修仙段位！");
             } else {
                 playerData.setCurrentWushuSubLevelIndex(targetSubLevel);
@@ -173,7 +173,7 @@ public class BreakthroughSystem {
     /**
      * 突破到下一修仙境界
      */
-    private boolean attemptNextXiuzhenRealmBreakthrough(Player player, EnhancedPlayerData playerData, String currentRealm) {
+    private boolean attemptNextXiuzhenRealmBreakthrough(Player player, PlayerData playerData, String currentRealm) {
         // 简化实现，实际应该读取配置文件中的突破要求
         String nextRealm = getNextXiuzhenRealm(currentRealm);
         
@@ -191,9 +191,9 @@ public class BreakthroughSystem {
         consumeBreakthroughItems(player, "xiuzhen", nextRealm);
         
         // 执行境界突破
-        playerData.setCurrentXiuzhenRealmKey(nextRealm);
-        playerData.setCurrentXiuzhenSubLevelIndex(0);
-        playerData.setCurrentXiuzhenExp(0);
+        playerData.setCurrentRealmKey(nextRealm);
+        playerData.setCurrentSubLevelIndex(0);
+        playerData.setCurrentExp(0);
         
         player.sendMessage(ChatColor.GOLD + "天道有感！恭喜你成功突破到 " + nextRealm + " 境界！");
         plugin.getLogger().info("玩家 " + player.getName() + " 突破到修仙境界: " + nextRealm);
@@ -204,7 +204,7 @@ public class BreakthroughSystem {
     /**
      * 突破到下一武者境界
      */
-    private boolean attemptNextWushuRealmBreakthrough(Player player, EnhancedPlayerData playerData, String currentRealm) {
+    private boolean attemptNextWushuRealmBreakthrough(Player player, PlayerData playerData, String currentRealm) {
         String nextRealm = getNextWushuRealm(currentRealm);
         
         if (nextRealm == null) {

@@ -9,7 +9,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDeathEvent;
 
-import com.adlamb.simplexiuzhen.EnhancedPlayerData;
+import com.adlamb.simplexiuzhen.PlayerData;
 import com.adlamb.simplexiuzhen.SimpleXiuzhen;
 import com.adlamb.simplexiuzhen.lang.LanguageManager;
 
@@ -96,15 +96,15 @@ public class MobKillListener implements Listener {
             expReward *= difficultyMultiplier;
             
             // 应用境界倍数（更强的玩家获得更多修为）
-            EnhancedPlayerData enhancedPlayerData = plugin.getEnhancedPlayerData(player.getUniqueId());
-            double realmMultiplier = getWushuRealmMultiplier(enhancedPlayerData.getCurrentWushuRealmKey());
+            PlayerData playerData = plugin.getPlayerData(player.getUniqueId());
+            double realmMultiplier = getWushuRealmMultiplier(playerData.getCurrentWushuRealmKey());
             expReward *= realmMultiplier;
             
             // 增加武者修为
-            enhancedPlayerData.addWushuExp(expReward);
+            playerData.addWushuExp(expReward);
             
             // 记录战斗状态
-            enhancedPlayerData.setInCombat(true);
+            playerData.recordCombatTime();
             
             // 显示获得修为提示
             if (plugin.getConfig().getBoolean("settings.mob_kill.show_exp_message", true)) {

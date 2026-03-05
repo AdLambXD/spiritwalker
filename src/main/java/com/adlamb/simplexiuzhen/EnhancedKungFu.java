@@ -91,13 +91,13 @@ public class EnhancedKungFu {
     /**
      * 检查是否可以学习此功法
      */
-    public boolean canLearn(EnhancedPlayerData playerData) {
+    public boolean canLearn(PlayerData playerData) {
         // 检查系统匹配
         if ("xiuzhen".equals(this.systemType)) {
-            if (!playerData.getCurrentXiuzhenRealmKey().equals(this.realmRequirement)) {
+            if (!playerData.getCurrentRealmKey().equals(this.realmRequirement)) {
                 return false;
             }
-            return playerData.getCurrentXiuzhenExp() >= this.expRequirement;
+            return playerData.getCurrentExp() >= this.expRequirement;
         } else if ("wushu".equals(this.systemType)) {
             if (!playerData.getCurrentWushuRealmKey().equals(this.realmRequirement)) {
                 return false;
@@ -110,7 +110,7 @@ public class EnhancedKungFu {
     /**
      * 检查是否可以使用此功法
      */
-    public boolean canUse(EnhancedPlayerData playerData) {
+    public boolean canUse(PlayerData playerData) {
         if (!this.isUnlocked) {
             return false;
         }
@@ -127,7 +127,7 @@ public class EnhancedKungFu {
     /**
      * 使用功法并消耗相应资源
      */
-    public boolean use(EnhancedPlayerData playerData) {
+    public boolean use(PlayerData playerData) {
         if (!canUse(playerData)) {
             return false;
         }

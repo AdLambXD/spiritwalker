@@ -159,7 +159,7 @@ public class EnhancedKungFuManager {
     /**
      * 获取玩家可以学习的功法
      */
-    public List<EnhancedKungFu> getAvailableKungFus(EnhancedPlayerData playerData) {
+    public List<EnhancedKungFu> getAvailableKungFus(PlayerData playerData) {
         List<EnhancedKungFu> available = new ArrayList<>();
         for (EnhancedKungFu kungFu : kungFuMap.values()) {
             if (kungFu.canLearn(playerData)) {
@@ -200,7 +200,7 @@ public class EnhancedKungFuManager {
      * 检查玩家是否可以学习功法
      */
     public boolean canLearnKungFu(UUID playerId, String kungFuId) {
-        EnhancedPlayerData playerData = plugin.getEnhancedPlayerData(playerId);
+        PlayerData playerData = plugin.getPlayerData(playerId);
         EnhancedKungFu kungFu = getKungFu(kungFuId);
         
         if (kungFu == null) return false;
@@ -227,7 +227,7 @@ public class EnhancedKungFuManager {
      * 使用功法
      */
     public boolean useKungFu(UUID playerId, String kungFuId) {
-        EnhancedPlayerData playerData = plugin.getEnhancedPlayerData(playerId);
+        PlayerData playerData = plugin.getPlayerData(playerId);
         EnhancedKungFu kungFu = getKungFu(kungFuId);
         
         if (kungFu == null) return false;

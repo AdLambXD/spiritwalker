@@ -14,7 +14,6 @@ import org.bukkit.inventory.meta.ItemMeta;
 
 import com.adlamb.simplexiuzhen.EnhancedKungFu;
 import com.adlamb.simplexiuzhen.EnhancedKungFuManager;
-import com.adlamb.simplexiuzhen.EnhancedPlayerData;
 import com.adlamb.simplexiuzhen.PlayerData;
 import com.adlamb.simplexiuzhen.SimpleXiuzhen;
 import com.adlamb.simplexiuzhen.lang.LanguageManager;
@@ -95,7 +94,7 @@ public class GuiManager {
         }
         
         // 获取玩家可学习的功法
-        EnhancedPlayerData playerData = plugin.getEnhancedPlayerData(player.getUniqueId());
+        PlayerData playerData = plugin.getPlayerData(player.getUniqueId());
         List<EnhancedKungFu> availableKungFus = kungFuManager.getAvailableKungFus(playerData);
         
         // 显示功法（每页最多45个）
@@ -291,7 +290,7 @@ public class GuiManager {
     /**
      * 创建增强版功法物品
      */
-    private ItemStack createEnhancedKungFuItem(EnhancedKungFu kungFu, EnhancedPlayerData playerData) {
+    private ItemStack createEnhancedKungFuItem(EnhancedKungFu kungFu, PlayerData playerData) {
         Material material = getKungFuMaterial(kungFu.getType());
         String displayName = "§" + getKungFuColor(kungFu.getType()) + kungFu.getName();
         

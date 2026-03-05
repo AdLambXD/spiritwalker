@@ -11,7 +11,7 @@ import org.bukkit.entity.Player;
 
 import com.adlamb.simplexiuzhen.EnhancedKungFu;
 import com.adlamb.simplexiuzhen.EnhancedKungFuManager;
-import com.adlamb.simplexiuzhen.EnhancedPlayerData;
+import com.adlamb.simplexiuzhen.PlayerData;
 import com.adlamb.simplexiuzhen.SimpleXiuzhen;
 
 /**
@@ -34,7 +34,7 @@ public class KungFuCommand implements CommandExecutor {
         }
         
         Player player = (Player) sender;
-        EnhancedPlayerData playerData = plugin.getEnhancedPlayerData(player.getUniqueId());
+        PlayerData playerData = plugin.getPlayerData(player.getUniqueId());
         
         if (args.length == 0) {
             showKungFuHelp(player);
@@ -77,7 +77,7 @@ public class KungFuCommand implements CommandExecutor {
      * 列出可用功法
      */
     private void listKungFus(Player player) {
-        EnhancedPlayerData playerData = plugin.getEnhancedPlayerData(player.getUniqueId());
+        PlayerData playerData = plugin.getPlayerData(player.getUniqueId());
         List<String> availableKungFus = new ArrayList<>();
         
         for (EnhancedKungFu kungFu : kungFuManager.getAllKungFus()) {
@@ -127,7 +127,7 @@ public class KungFuCommand implements CommandExecutor {
             return;
         }
         
-        EnhancedPlayerData playerData = plugin.getEnhancedPlayerData(player.getUniqueId());
+        PlayerData playerData = plugin.getPlayerData(player.getUniqueId());
         String kungFuId = args[1];
         EnhancedKungFu kungFu = kungFuManager.getKungFu(kungFuId);
         

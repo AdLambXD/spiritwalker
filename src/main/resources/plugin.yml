@@ -10,14 +10,7 @@ commands:
     description: 修仙系统主命令
     usage: /xiuzhen [meditate|stats|top|info|gui]
     permission: simplexiuzhen.use
-    aliases: [xz, xiuxian]
-    tab-complete: true
-    
-  wushu:
-    description: 武者系统主命令
-    usage: /wushu [train|stats|breakthrough|kungfu|info]
-    permission: simplexiuzhen.use
-    aliases: [ws, wushuxitong]
+    aliases: [xz, xiuxian, xx]
     tab-complete: true
     
   status:
