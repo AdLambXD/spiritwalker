@@ -7,7 +7,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.bukkit.ChatColor;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -60,7 +61,7 @@ public class XiuzhenCommand extends BaseCommand {
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (!isPlayer(sender)) {
-            sender.sendMessage(ChatColor.RED + "只有玩家可以使用此命令！");
+            sender.sendMessage(Component.text("只有玩家可以使用此命令！", NamedTextColor.RED));
             return true;
         }
 
@@ -91,7 +92,7 @@ public class XiuzhenCommand extends BaseCommand {
             case "kungfu":
                 return handleKungFu(player, args);
             default:
-                player.sendMessage(ChatColor.RED + "未知的子命令！使用 /xz 查看帮助");
+                player.sendMessage(Component.text("未知的子命令！使用 /xz 查看帮助", NamedTextColor.RED));
                 return true;
         }
     }
@@ -118,16 +119,16 @@ public class XiuzhenCommand extends BaseCommand {
         playerData.toggleMeditation(player);
 
         if (playerData.isMeditating()) {
-            player.sendMessage(ChatColor.GREEN + "开始打坐修炼！");
-            player.sendMessage(ChatColor.YELLOW + "保持静止以获得修为...");
+            player.sendMessage(Component.text("开始打坐修炼！", NamedTextColor.GREEN));
+            player.sendMessage(Component.text("保持静止以获得修为...", NamedTextColor.YELLOW));
             
-            TextComponent component = new TextComponent(ChatColor.GOLD + "[点击停止打坐]");
+            TextComponent component = new TextComponent(NamedTextColor.GOLD + "[点击停止打坐]");
             component.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/xz meditate"));
             component.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, 
                 new ComponentBuilder("点击立即停止打坐").create()));
             player.spigot().sendMessage(component);
         } else {
-            player.sendMessage(ChatColor.RED + "停止打坐修炼。");
+            player.sendMessage(Component.text("停止打坐修炼。", NamedTextColor.RED));
         }
         return true;
     }
@@ -149,16 +150,16 @@ public class XiuzhenCommand extends BaseCommand {
         playerData.toggleCombatTraining(player);
         
         if (playerData.isInCombatTraining()) {
-            player.sendMessage(ChatColor.GREEN + "开始武者战斗训练！");
-            player.sendMessage(ChatColor.YELLOW + "通过战斗来提升内力和武者修为...");
+            player.sendMessage(Component.text("开始武者战斗训练！", NamedTextColor.GREEN));
+            player.sendMessage(Component.text("通过战斗来提升内力和武者修为...", NamedTextColor.YELLOW));
             
-            player.sendMessage(ChatColor.AQUA + "当前内力：" + ChatColor.WHITE + 
+            player.sendMessage(NamedTextColor.AQUA + "当前内力：" + NamedTextColor.WHITE + 
                 String.format("%.1f", playerData.getCurrentNeili()) + "/" + 
                 String.format("%.1f", playerData.getMaxNeili()));
-            player.sendMessage(ChatColor.AQUA + "武者境界：" + ChatColor.WHITE + 
+            player.sendMessage(NamedTextColor.AQUA + "武者境界：" + NamedTextColor.WHITE + 
                 getWushuRealmDisplay(playerData));
         } else {
-            player.sendMessage(ChatColor.RED + "停止武者战斗训练。");
+            player.sendMessage(Component.text("停止武者战斗训练。", NamedTextColor.RED));
         }
         
         return true;
@@ -170,10 +171,10 @@ public class XiuzhenCommand extends BaseCommand {
     private boolean handleBreakthrough(Player player) {
         PlayerData playerData = plugin.getPlayerData(player.getUniqueId());
         if (breakthroughSystem.attemptWushuBreakthrough(player, playerData)) {
-            player.sendMessage(ChatColor.GOLD + "武道突破成功！");
+            player.sendMessage(Component.text("武道突破成功！", NamedTextColor.GOLD));
             displayUnifiedStats(player, playerData);
         } else {
-            player.sendMessage(ChatColor.RED + "突破条件不满足或突破失败！");
+            player.sendMessage(Component.text("突破条件不满足或突破失败！", NamedTextColor.RED));
         }
         return true;
     }
@@ -183,7 +184,7 @@ public class XiuzhenCommand extends BaseCommand {
      */
     private boolean handleKungFu(Player player, String[] args) {
         if (args.length < 2) {
-            player.sendMessage(ChatColor.RED + "请指定功法操作：list, learn, use, info");
+            player.sendMessage(Component.text("请指定功法操作：list, learn, use, info", NamedTextColor.RED));
             return true;
         }
         
@@ -195,25 +196,25 @@ public class XiuzhenCommand extends BaseCommand {
                 if (args.length >= 3) {
                     learnKungFu(player, args[2]);
                 } else {
-                    player.sendMessage(ChatColor.RED + "请指定功法 ID");
+                    player.sendMessage(Component.text("请指定功法 ID", NamedTextColor.RED));
                 }
                 break;
             case "use":
                 if (args.length >= 3) {
                     useKungFu(player, args[2]);
                 } else {
-                    player.sendMessage(ChatColor.RED + "请指定功法 ID");
+                    player.sendMessage(Component.text("请指定功法 ID", NamedTextColor.RED));
                 }
                 break;
             case "info":
                 if (args.length >= 3) {
                     showKungFuInfo(player, args[2]);
                 } else {
-                    player.sendMessage(ChatColor.RED + "请指定功法 ID");
+                    player.sendMessage(Component.text("请指定功法 ID", NamedTextColor.RED));
                 }
                 break;
             default:
-                player.sendMessage(ChatColor.RED + "未知的功法操作！使用：list, learn, use, info");
+                player.sendMessage(Component.text("未知的功法操作！使用：list, learn, use, info", NamedTextColor.RED));
         }
         return true;
     }
@@ -228,7 +229,7 @@ public class XiuzhenCommand extends BaseCommand {
                 page = Integer.parseInt(args[1]);
                 if (page < 1) page = 1;
             } catch (NumberFormatException e) {
-                sender.sendMessage(ChatColor.RED + "页码必须是数字！");
+                sender.sendMessage(Component.text("页码必须是数字！", NamedTextColor.RED));
                 return true;
             }
         }
@@ -243,7 +244,7 @@ public class XiuzhenCommand extends BaseCommand {
     private boolean handleInfo(CommandSender sender, String[] args) {
         FileConfiguration realmsConfig = configManager.getRealmsConfig();
         
-        sender.sendMessage(ChatColor.GOLD + "=== 境界体系介绍 ===");
+        sender.sendMessage(Component.text("=== 境界体系介绍 ===", NamedTextColor.GOLD));
         
         // 获取所有境界
         Set<String> realms = realmsConfig.getConfigurationSection("realms").getKeys(false);
@@ -251,7 +252,7 @@ public class XiuzhenCommand extends BaseCommand {
             String displayName = realmsConfig.getString("realms." + realmKey + ".display_name", realmKey);
             int level = realmsConfig.getInt("realms." + realmKey + ".level", 0);
             
-            sender.sendMessage(ChatColor.AQUA + displayName + " (等级 " + level + ")");
+            sender.sendMessage(NamedTextColor.AQUA + displayName + " (等级 " + level + ")");
             
             try {
                 List<Map<?, ?>> subLevels = realmsConfig.getMapList("realms." + realmKey + ".sub_levels");
@@ -263,15 +264,15 @@ public class XiuzhenCommand extends BaseCommand {
                     if (expObj instanceof Number) {
                         requiredExp = ((Number) expObj).intValue();
                     }
-                    sender.sendMessage("  " + ChatColor.WHITE + "- " + name + ": 需要修为 " + requiredExp);
+                    sender.sendMessage("  " + NamedTextColor.WHITE + "- " + name + ": 需要修为 " + requiredExp);
                 }
             } catch (Exception e) {
-                sender.sendMessage("  " + ChatColor.RED + "段位信息读取失败");
+                sender.sendMessage("  " + NamedTextColor.RED + "段位信息读取失败");
             }
             sender.sendMessage("");
         }
         
-        sender.sendMessage(ChatColor.YELLOW + "使用 /xz stats 查看个人状态");
+        sender.sendMessage(Component.text("使用 /xz stats 查看个人状态", NamedTextColor.YELLOW));
         return true;
     }
     
@@ -287,28 +288,26 @@ public class XiuzhenCommand extends BaseCommand {
      * 显示统一的状态信息（新模板）
      */
     private void displayUnifiedStats(Player player, PlayerData playerData) {
-        player.sendMessage(ChatColor.GOLD + "---==修炼状态==---");
+        player.sendMessage(Component.text("---==修炼状态==---", NamedTextColor.GOLD));
         
         // 修仙境界
         String xiuzhenRealm = getXiuzhenRealmDisplay(playerData);
         String xiuzhenNext = getNextXiuzhenRequirement(playerData);
-        player.sendMessage(ChatColor.AQUA + "修仙境界：" + ChatColor.WHITE + xiuzhenRealm);
-        player.sendMessage(ChatColor.AQUA + "┗下层境界：" + ChatColor.GRAY + xiuzhenNext);
+        player.sendMessage(NamedTextColor.AQUA + "修仙境界：" + NamedTextColor.WHITE + xiuzhenRealm);
         
         // 武者境界
         String wushuRealm = getWushuRealmDisplay(playerData);
         String wushuNext = getNextWushuRequirement(playerData);
-        player.sendMessage(ChatColor.AQUA + "武者境界：" + ChatColor.WHITE + wushuRealm);
-        player.sendMessage(ChatColor.AQUA + "┗下层境界：" + ChatColor.GRAY + wushuNext);
+        player.sendMessage(NamedTextColor.AQUA + "武者境界：" + NamedTextColor.WHITE + wushuRealm);
         
-        player.sendMessage(ChatColor.GOLD + "-----------------------");
+        player.sendMessage(Component.text("-----------------------", NamedTextColor.GOLD));
         
         // 打坐状态
         String meditationStatus = playerData.isMeditating() ? 
-            ChatColor.GREEN + "打坐中..." : ChatColor.RED + "未打坐";
-        player.sendMessage(ChatColor.AQUA + "打坐状态：" + meditationStatus);
+            NamedTextColor.GREEN + "打坐中..." : NamedTextColor.RED + "未打坐";
+        player.sendMessage(NamedTextColor.AQUA + "打坐状态：" + meditationStatus);
         
-        player.sendMessage(ChatColor.GOLD + "---==========---");
+        player.sendMessage(Component.text("---==========---", NamedTextColor.GOLD));
     }
     
     /**
@@ -435,15 +434,15 @@ public class XiuzhenCommand extends BaseCommand {
     private void listKungFus(Player player) {
         List<EnhancedKungFu> allKungFus = new ArrayList<>(kungFuManager.getAllKungFus());
         
-        player.sendMessage(ChatColor.GOLD + "=== 功法列表 ===");
+        player.sendMessage(Component.text("=== 功法列表 ===", NamedTextColor.GOLD));
         for (EnhancedKungFu kungFu : allKungFus) {
             String status = kungFuManager.hasKungFu(player.getUniqueId(), kungFu.getId()) ? 
-                ChatColor.GREEN + "[已学习]" : 
+                NamedTextColor.GREEN + "[已学习]" : 
                 (kungFuManager.canLearnKungFu(player.getUniqueId(), kungFu.getId()) ? 
-                    ChatColor.YELLOW + "[可学习]" : 
-                    ChatColor.GRAY + "[未解锁]");
+                    NamedTextColor.YELLOW + "[可学习]" : 
+                    NamedTextColor.GRAY + "[未解锁]");
             
-            player.sendMessage(status + " " + ChatColor.WHITE + kungFu.getName() + 
+            player.sendMessage(status + " " + NamedTextColor.WHITE + kungFu.getName() + 
                 " (" + kungFu.getTypeDisplay() + ") - " + kungFu.getDescription());
         }
     }
@@ -454,9 +453,9 @@ public class XiuzhenCommand extends BaseCommand {
     private void learnKungFu(Player player, String kungFuId) {
         if (kungFuManager.learnKungFu(player.getUniqueId(), kungFuId)) {
             EnhancedKungFu kungFu = kungFuManager.getKungFu(kungFuId);
-            player.sendMessage(ChatColor.GREEN + "成功学习功法：" + kungFu.getName());
+            player.sendMessage(NamedTextColor.GREEN + "成功学习功法：" + kungFu.getName());
         } else {
-            player.sendMessage(ChatColor.RED + "无法学习该功法，请检查境界和修为要求");
+            player.sendMessage(Component.text("无法学习该功法，请检查境界和修为要求", NamedTextColor.RED));
         }
     }
     
@@ -466,15 +465,15 @@ public class XiuzhenCommand extends BaseCommand {
     private void useKungFu(Player player, String kungFuId) {
         EnhancedKungFu kungFu = kungFuManager.getKungFu(kungFuId);
         if (kungFu == null) {
-            player.sendMessage(ChatColor.RED + "找不到该功法！");
+            player.sendMessage(Component.text("找不到该功法！", NamedTextColor.RED));
             return;
         }
 
         if (kungFuManager.useKungFu(player.getUniqueId(), kungFuId)) {
-            player.sendMessage(ChatColor.GREEN + "施展功法：" + kungFu.getName());
-            player.sendMessage(ChatColor.YELLOW + "效果：" + String.join(", ", kungFu.getEffects()));
+            player.sendMessage(NamedTextColor.GREEN + "施展功法：" + kungFu.getName());
+            player.sendMessage(NamedTextColor.YELLOW + "效果：" + String.join(", ", kungFu.getEffects()));
         } else {
-            player.sendMessage(ChatColor.RED + "功法使用失败！");
+            player.sendMessage(Component.text("功法使用失败！", NamedTextColor.RED));
         }
     }
     
@@ -484,32 +483,32 @@ public class XiuzhenCommand extends BaseCommand {
     private void showKungFuInfo(Player player, String kungFuId) {
         EnhancedKungFu kungFu = kungFuManager.getKungFu(kungFuId);
         if (kungFu == null) {
-            player.sendMessage(ChatColor.RED + "找不到该功法！");
+            player.sendMessage(Component.text("找不到该功法！", NamedTextColor.RED));
             return;
         }
 
-        player.sendMessage(ChatColor.GOLD + "=== 功法详情 ===");
-        player.sendMessage(ChatColor.AQUA + "名称：" + ChatColor.WHITE + kungFu.getName());
-        player.sendMessage(ChatColor.AQUA + "类型：" + ChatColor.WHITE + kungFu.getTypeDisplay());
-        player.sendMessage(ChatColor.AQUA + "等级：" + ChatColor.WHITE + kungFu.getLevelDisplay());
-        player.sendMessage(ChatColor.AQUA + "灵力消耗：" + ChatColor.WHITE + kungFu.getLingliCost());
-        player.sendMessage(ChatColor.AQUA + "内力消耗：" + ChatColor.WHITE + kungFu.getNeiliCost());
-        player.sendMessage(ChatColor.AQUA + "冷却时间：" + ChatColor.WHITE + (kungFu.getCooldownTicks() / 20) + "秒");
-        player.sendMessage(ChatColor.AQUA + "描述：" + ChatColor.WHITE + kungFu.getDescription());
+        player.sendMessage(Component.text("=== 功法详情 ===", NamedTextColor.GOLD));
+        player.sendMessage(NamedTextColor.AQUA + "名称：" + NamedTextColor.WHITE + kungFu.getName());
+        player.sendMessage(NamedTextColor.AQUA + "类型：" + NamedTextColor.WHITE + kungFu.getTypeDisplay());
+        player.sendMessage(NamedTextColor.AQUA + "等级：" + NamedTextColor.WHITE + kungFu.getLevelDisplay());
+        player.sendMessage(NamedTextColor.AQUA + "灵力消耗：" + NamedTextColor.WHITE + kungFu.getLingliCost());
+        player.sendMessage(NamedTextColor.AQUA + "内力消耗：" + NamedTextColor.WHITE + kungFu.getNeiliCost());
+        player.sendMessage(NamedTextColor.AQUA + "冷却时间：" + NamedTextColor.WHITE + (kungFu.getCooldownTicks() / 20) + "秒");
+        player.sendMessage(NamedTextColor.AQUA + "描述：" + NamedTextColor.WHITE + kungFu.getDescription());
     }
 
     /**
      * 显示帮助信息
      */
     private void showHelp(CommandSender sender) {
-        sender.sendMessage(ChatColor.GOLD + "=== 修仙系统命令帮助 ===");
-        sender.sendMessage(ChatColor.AQUA + "/xz" + ChatColor.WHITE + " - 查看基本信息");
-        sender.sendMessage(ChatColor.AQUA + "/xz meditate" + ChatColor.WHITE + " - 开始/停止打坐");
-        sender.sendMessage(ChatColor.AQUA + "/xz stats" + ChatColor.WHITE + " - 查看详细状态");
-        sender.sendMessage(ChatColor.AQUA + "/xz top [页码]" + ChatColor.WHITE + " - 查看排行榜");
-        sender.sendMessage(ChatColor.AQUA + "/xz info" + ChatColor.WHITE + " - 查看境界介绍");
-        sender.sendMessage(ChatColor.AQUA + "/xz gui" + ChatColor.WHITE + " - 打开图形界面");
+        sender.sendMessage(Component.text("=== 修仙系统命令帮助 ===", NamedTextColor.GOLD));
+        sender.sendMessage(NamedTextColor.AQUA + "/xz" + NamedTextColor.WHITE + " - 查看基本信息");
+        sender.sendMessage(NamedTextColor.AQUA + "/xz meditate" + NamedTextColor.WHITE + " - 开始/停止打坐");
+        sender.sendMessage(NamedTextColor.AQUA + "/xz stats" + NamedTextColor.WHITE + " - 查看详细状态");
+        sender.sendMessage(NamedTextColor.AQUA + "/xz top [页码]" + NamedTextColor.WHITE + " - 查看排行榜");
+        sender.sendMessage(NamedTextColor.AQUA + "/xz info" + NamedTextColor.WHITE + " - 查看境界介绍");
+        sender.sendMessage(NamedTextColor.AQUA + "/xz gui" + NamedTextColor.WHITE + " - 打开图形界面");
         sender.sendMessage("");
-        sender.sendMessage(ChatColor.GRAY + "提示：别名 /xiuzhen, /xz /xx 均可使用");
+        sender.sendMessage(Component.text("提示：别名 /xiuzhen, /xz /xx 均可使用", NamedTextColor.GRAY));
     }
 }

@@ -6,7 +6,8 @@ import java.util.Set;
 import java.util.logging.Level;
 
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.data.type.Stairs;
@@ -76,7 +77,7 @@ public class ThirdPartyIntegration {
     public void handlePlayerSit(Player player) {
         if (compatiblePlugins.isEmpty()) return;
         
-        player.sendMessage(ChatColor.GREEN + "[修仙系统] 检测到你坐下，自动开始打坐！");
+        player.sendMessage(Component.text("[修仙系统] 检测到你坐下，自动开始打坐！", NamedTextColor.GREEN));
         // 实际的打坐逻辑在 SeatListener 中处理
     }
 
@@ -86,7 +87,7 @@ public class ThirdPartyIntegration {
     public void handlePlayerStand(Player player) {
         if (compatiblePlugins.isEmpty()) return;
         
-        player.sendMessage(ChatColor.RED + "[修仙系统] 你站起来了，打坐结束。");
+        player.sendMessage(Component.text("[修仙系统] 你站起来了，打坐结束。", NamedTextColor.RED));
         // 实际的停止打坐逻辑在 SeatListener 中处理
     }
 

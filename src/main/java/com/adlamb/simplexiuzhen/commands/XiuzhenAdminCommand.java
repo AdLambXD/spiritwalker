@@ -10,7 +10,8 @@ import java.util.List;
 import java.util.UUID;
 
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -52,7 +53,7 @@ public class XiuzhenAdminCommand implements CommandExecutor, TabCompleter {
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (!sender.hasPermission("simplexiuzhen.admin")) {
-            sender.sendMessage(ChatColor.RED + "你没有权限使用此命令！");
+            sender.sendMessage(Component.text("你没有权限使用此命令！", NamedTextColor.RED));
             return true;
         }
 
@@ -73,7 +74,7 @@ public class XiuzhenAdminCommand implements CommandExecutor, TabCompleter {
             case "reset":
                 return handleReset(sender, args);
             default:
-                sender.sendMessage(ChatColor.RED + "未知的管理员命令！");
+                sender.sendMessage(Component.text("未知的管理员命令！", NamedTextColor.RED));
                 showAdminHelp(sender);
                 return true;
         }
@@ -156,8 +157,8 @@ public class XiuzhenAdminCommand implements CommandExecutor, TabCompleter {
      */
     private boolean handleSetRealm(CommandSender sender, String[] args) {
         if (args.length < 3) {
-            sender.sendMessage(ChatColor.RED + "用法: /xiuzhenadmin setrealm <玩家名> <境界Key>");
-            sender.sendMessage(ChatColor.YELLOW + "示例: /xiuzhenadmin setrealm Player1 JinDan");
+            sender.sendMessage(Component.text("用法: /xiuzhenadmin setrealm <玩家名> <境界Key>", NamedTextColor.RED));
+            sender.sendMessage(Component.text("示例: /xiuzhenadmin setrealm Player1 JinDan", NamedTextColor.YELLOW));
             return true;
         }
 
@@ -166,14 +167,14 @@ public class XiuzhenAdminCommand implements CommandExecutor, TabCompleter {
         
         Player targetPlayer = Bukkit.getPlayerExact(playerName);
         if (targetPlayer == null) {
-            sender.sendMessage(ChatColor.RED + "玩家 " + playerName + " 不在线！");
+            sender.sendMessage(NamedTextColor.RED + "玩家 " + playerName + " 不在线！");
             return true;
         }
 
         // 验证境界是否存在
         if (!configManager.getRealmsConfig().contains("realms." + realmKey)) {
-            sender.sendMessage(ChatColor.RED + "境界 " + realmKey + " 不存在！");
-            sender.sendMessage(ChatColor.YELLOW + "可用境界: " + String.join(", ", REALMS_LIST));
+            sender.sendMessage(NamedTextColor.RED + "境界 " + realmKey + " 不存在！");
+            sender.sendMessage(NamedTextColor.YELLOW + "可用境界: " + String.join(", ", REALMS_LIST));
             return true;
         }
 
@@ -183,8 +184,8 @@ public class XiuzhenAdminCommand implements CommandExecutor, TabCompleter {
         playerData.setCurrentExp(0);
         playerData.saveData();
 
-        sender.sendMessage(ChatColor.GREEN + "已将玩家 " + playerName + " 的境界设置为 " + realmKey);
-        targetPlayer.sendMessage(ChatColor.GOLD + "管理员已将你的境界设置为 " + realmKey);
+        sender.sendMessage(NamedTextColor.GREEN + "已将玩家 " + playerName + " 的境界设置为 " + realmKey);
+        targetPlayer.sendMessage(NamedTextColor.GOLD + "管理员已将你的境界设置为 " + realmKey);
         return true;
     }
 
@@ -193,7 +194,7 @@ public class XiuzhenAdminCommand implements CommandExecutor, TabCompleter {
      */
     private boolean handleAddExp(CommandSender sender, String[] args) {
         if (args.length < 3) {
-            sender.sendMessage(ChatColor.RED + "用法: /xiuzhenadmin addexp <玩家名> <修为值>");
+            sender.sendMessage(Component.text("用法: /xiuzhenadmin addexp <玩家名> <修为值>", NamedTextColor.RED));
             return true;
         }
 
@@ -203,17 +204,17 @@ public class XiuzhenAdminCommand implements CommandExecutor, TabCompleter {
         try {
             expToAdd = Integer.parseInt(args[2]);
             if (expToAdd <= 0) {
-                sender.sendMessage(ChatColor.RED + "修为值必须大于0！");
+                sender.sendMessage(Component.text("修为值必须大于0！", NamedTextColor.RED));
                 return true;
             }
         } catch (NumberFormatException e) {
-            sender.sendMessage(ChatColor.RED + "修为值必须是数字！");
+            sender.sendMessage(Component.text("修为值必须是数字！", NamedTextColor.RED));
             return true;
         }
 
         Player targetPlayer = Bukkit.getPlayerExact(playerName);
         if (targetPlayer == null) {
-            sender.sendMessage(ChatColor.RED + "玩家 " + playerName + " 不在线！");
+            sender.sendMessage(NamedTextColor.RED + "玩家 " + playerName + " 不在线！");
             return true;
         }
 
@@ -221,8 +222,8 @@ public class XiuzhenAdminCommand implements CommandExecutor, TabCompleter {
         playerData.addExp(expToAdd);
         playerData.saveData();
 
-        sender.sendMessage(ChatColor.GREEN + "已为玩家 " + playerName + " 添加 " + expToAdd + " 点修为");
-        targetPlayer.sendMessage(ChatColor.GOLD + "管理员为你增加了 " + expToAdd + " 点修为");
+        sender.sendMessage(NamedTextColor.GREEN + "已为玩家 " + playerName + " 添加 " + expToAdd + " 点修为");
+        targetPlayer.sendMessage(NamedTextColor.GOLD + "管理员为你增加了 " + expToAdd + " 点修为");
         return true;
     }
 
@@ -233,10 +234,10 @@ public class XiuzhenAdminCommand implements CommandExecutor, TabCompleter {
         try {
             configManager.reloadConfigs();
             databaseManager.reload();
-            sender.sendMessage(ChatColor.GREEN + "配置文件和数据库连接重载成功！");
-            sender.sendMessage(ChatColor.YELLOW + "当前存储类型: " + databaseManager.getStorageTypeString());
+            sender.sendMessage(Component.text("配置文件和数据库连接重载成功！", NamedTextColor.GREEN));
+            sender.sendMessage(NamedTextColor.YELLOW + "当前存储类型: " + databaseManager.getStorageTypeString());
         } catch (Exception e) {
-            sender.sendMessage(ChatColor.RED + "重载失败: " + e.getMessage());
+            sender.sendMessage(NamedTextColor.RED + "重载失败: " + e.getMessage());
             plugin.getLogger().severe("配置重载失败: " + e.getMessage());
         }
         return true;
@@ -246,7 +247,7 @@ public class XiuzhenAdminCommand implements CommandExecutor, TabCompleter {
      * 数据备份
      */
     private boolean handleBackup(CommandSender sender, String[] args) {
-        sender.sendMessage(ChatColor.YELLOW + "正在创建数据备份...");
+        sender.sendMessage(Component.text("正在创建数据备份...", NamedTextColor.YELLOW));
         
         try {
             String timestamp = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMdd_HHmmss"));
@@ -258,21 +259,21 @@ public class XiuzhenAdminCommand implements CommandExecutor, TabCompleter {
             
             // 复制数据库文件（如果是MySQL）
             if (databaseManager.getStorageType().isDatabase()) {
-                sender.sendMessage(ChatColor.GREEN + "MySQL备份指令已记录，请手动执行备份");
+                sender.sendMessage(Component.text("MySQL备份指令已记录，请手动执行备份", NamedTextColor.GREEN));
             } else {
                 // YAML模式备份
-                sender.sendMessage(ChatColor.GREEN + "YAML数据备份完成: " + backupName);
+                sender.sendMessage(NamedTextColor.GREEN + "YAML数据备份完成: " + backupName);
             }
             
             // 备份配置文件
             File configFile = new File(plugin.getDataFolder(), "config.yml");
             File realmsFile = new File(plugin.getDataFolder(), "realms.yml");
             
-            sender.sendMessage(ChatColor.GREEN + "配置文件备份完成");
-            sender.sendMessage(ChatColor.YELLOW + "备份位置: " + backupDir.getAbsolutePath());
+            sender.sendMessage(Component.text("配置文件备份完成", NamedTextColor.GREEN));
+            sender.sendMessage(NamedTextColor.YELLOW + "备份位置: " + backupDir.getAbsolutePath());
             
         } catch (Exception e) {
-            sender.sendMessage(ChatColor.RED + "备份失败: " + e.getMessage());
+            sender.sendMessage(NamedTextColor.RED + "备份失败: " + e.getMessage());
             plugin.getLogger().severe("备份失败: " + e.getMessage());
         }
         return true;
@@ -283,8 +284,8 @@ public class XiuzhenAdminCommand implements CommandExecutor, TabCompleter {
      */
     private boolean handleReset(CommandSender sender, String[] args) {
         if (args.length < 2) {
-            sender.sendMessage(ChatColor.RED + "用法: /xiuzhenadmin reset <玩家名>");
-            sender.sendMessage(ChatColor.RED + "警告: 此操作不可逆！");
+            sender.sendMessage(Component.text("用法: /xiuzhenadmin reset <玩家名>", NamedTextColor.RED));
+            sender.sendMessage(Component.text("警告: 此操作不可逆！", NamedTextColor.RED));
             return true;
         }
 
@@ -292,7 +293,7 @@ public class XiuzhenAdminCommand implements CommandExecutor, TabCompleter {
         OfflinePlayer targetPlayer = Bukkit.getOfflinePlayer(playerName);
         
         if (!targetPlayer.hasPlayedBefore()) {
-            sender.sendMessage(ChatColor.RED + "玩家 " + playerName + " 从未加入过服务器！");
+            sender.sendMessage(NamedTextColor.RED + "玩家 " + playerName + " 从未加入过服务器！");
             return true;
         }
 
@@ -307,12 +308,12 @@ public class XiuzhenAdminCommand implements CommandExecutor, TabCompleter {
         // 从内存中移除
         plugin.removePlayerData(playerUUID);
 
-        sender.sendMessage(ChatColor.GREEN + "已重置玩家 " + playerName + " 的所有修仙数据");
+        sender.sendMessage(NamedTextColor.GREEN + "已重置玩家 " + playerName + " 的所有修仙数据");
         
         if (targetPlayer.isOnline()) {
             Player onlinePlayer = targetPlayer.getPlayer();
             if (onlinePlayer != null) {
-                onlinePlayer.sendMessage(ChatColor.RED + "你的修仙数据已被管理员重置");
+                onlinePlayer.sendMessage(Component.text("你的修仙数据已被管理员重置", NamedTextColor.RED));
             }
         }
         return true;
@@ -322,25 +323,25 @@ public class XiuzhenAdminCommand implements CommandExecutor, TabCompleter {
      * 显示管理员帮助
      */
     private void showAdminHelp(CommandSender sender) {
-        sender.sendMessage(ChatColor.GOLD + "=== 修仙系统管理员命令 ===");
+        sender.sendMessage(Component.text("=== 修仙系统管理员命令 ===", NamedTextColor.GOLD));
         
         // 从配置文件读取管理员命令帮助
         List<String> adminCommands = plugin.getConfig().getStringList("messages.help.admin_commands");
         if (!adminCommands.isEmpty()) {
             for (String cmd : adminCommands) {
-                sender.sendMessage(ChatColor.RED + cmd);
+                sender.sendMessage(NamedTextColor.RED + cmd);
             }
         } else {
             // 默认帮助信息
-            sender.sendMessage(ChatColor.RED + "/xiuzhenadmin setrealm <玩家> <境界>" + ChatColor.WHITE + " - 设置玩家境界");
-            sender.sendMessage(ChatColor.RED + "/xiuzhenadmin addexp <玩家> <修为>" + ChatColor.WHITE + " - 添加修为");
-            sender.sendMessage(ChatColor.RED + "/xiuzhenadmin reloadconfig" + ChatColor.WHITE + " - 重载配置");
-            sender.sendMessage(ChatColor.RED + "/xiuzhenadmin backup" + ChatColor.WHITE + " - 创建数据备份");
-            sender.sendMessage(ChatColor.RED + "/xiuzhenadmin reset <玩家>" + ChatColor.WHITE + " - 重置玩家数据");
+            sender.sendMessage(NamedTextColor.RED + "/xiuzhenadmin setrealm <玩家> <境界>" + NamedTextColor.WHITE + " - 设置玩家境界");
+            sender.sendMessage(NamedTextColor.RED + "/xiuzhenadmin addexp <玩家> <修为>" + NamedTextColor.WHITE + " - 添加修为");
+            sender.sendMessage(NamedTextColor.RED + "/xiuzhenadmin reloadconfig" + NamedTextColor.WHITE + " - 重载配置");
+            sender.sendMessage(NamedTextColor.RED + "/xiuzhenadmin backup" + NamedTextColor.WHITE + " - 创建数据备份");
+            sender.sendMessage(NamedTextColor.RED + "/xiuzhenadmin reset <玩家>" + NamedTextColor.WHITE + " - 重置玩家数据");
         }
         
         sender.sendMessage("");
-        sender.sendMessage(ChatColor.GRAY + "别名: /xza, /xzadmin");
-        sender.sendMessage(ChatColor.GRAY + "使用 TAB 键可获得智能命令补全");
+        sender.sendMessage(Component.text("别名: /xza, /xzadmin", NamedTextColor.GRAY));
+        sender.sendMessage(Component.text("使用 TAB 键可获得智能命令补全", NamedTextColor.GRAY));
     }
 }

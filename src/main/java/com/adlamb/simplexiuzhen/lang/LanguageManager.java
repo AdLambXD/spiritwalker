@@ -6,7 +6,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Logger;
 
-import org.bukkit.ChatColor;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -202,8 +203,12 @@ public class LanguageManager {
             }
         }
         
-        // 颜色代码转换
-        return ChatColor.translateAlternateColorCodes('&', message);
+        // 颜色代码转换 - 使用 Legacy 格式支持
+        return net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer.legacySection().serialize(
+            net.kyori.adventure.text.minimessage.MiniMessage.miniMessage().deserialize(
+                message.replace('&', '§')
+            )
+        );
     }
 
     /**

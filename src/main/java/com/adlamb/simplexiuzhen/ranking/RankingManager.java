@@ -4,7 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -74,12 +75,12 @@ public class RankingManager {
         int startIndex = (page - 1) * pageSize;
         int endIndex = Math.min(startIndex + pageSize, rankings.size());
         
-        sender.sendMessage(ChatColor.GOLD + "=== 修仙排行榜 (第" + page + "/" + totalPages + "页) ===");
-        sender.sendMessage(ChatColor.GRAY + "排名  玩家名        境界        总修为    当前修为");
-        sender.sendMessage(ChatColor.GRAY + "--------------------------------------------------");
+        sender.sendMessage(NamedTextColor.GOLD + "=== 修仙排行榜 (第" + page + "/" + totalPages + "页) ===");
+        sender.sendMessage(Component.text("排名  玩家名        境界        总修为    当前修为", NamedTextColor.GRAY));
+        sender.sendMessage(Component.text("--------------------------------------------------", NamedTextColor.GRAY));
         
         if (rankings.isEmpty()) {
-            sender.sendMessage(ChatColor.YELLOW + "暂无玩家数据");
+            sender.sendMessage(Component.text("暂无玩家数据", NamedTextColor.YELLOW));
             return;
         }
         
@@ -88,20 +89,20 @@ public class RankingManager {
             int displayRank = i + 1;
             
             String rankColorStr = displayRank <= 3 ? 
-                (displayRank == 1 ? ChatColor.GOLD.toString() : 
-                 displayRank == 2 ? ChatColor.AQUA.toString() : ChatColor.LIGHT_PURPLE.toString()) : 
-                ChatColor.WHITE.toString();
+                (displayRank == 1 ? NamedTextColor.GOLD.toString() : 
+                 displayRank == 2 ? NamedTextColor.AQUA.toString() : NamedTextColor.LIGHT_PURPLE.toString()) : 
+                NamedTextColor.WHITE.toString();
             
             sender.sendMessage(rankColorStr + String.format("%-4d", displayRank) + " " +
-                ChatColor.WHITE.toString() + String.format("%-12s", ranking.getPlayerName()) + " " +
-                ChatColor.AQUA.toString() + String.format("%-10s", ranking.getRealmName()) + " " +
-                ChatColor.GREEN.toString() + String.format("%-8d", ranking.getTotalExp()) + " " +
-                ChatColor.YELLOW.toString() + ranking.getCurrentExp());
+                NamedTextColor.WHITE.toString() + String.format("%-12s", ranking.getPlayerName()) + " " +
+                NamedTextColor.AQUA.toString() + String.format("%-10s", ranking.getRealmName()) + " " +
+                NamedTextColor.GREEN.toString() + String.format("%-8d", ranking.getTotalExp()) + " " +
+                NamedTextColor.YELLOW.toString() + ranking.getCurrentExp());
         }
         
         sender.sendMessage("");
         if (totalPages > 1) {
-            sender.sendMessage(ChatColor.GRAY + "使用 /xiuzhen top <页码> 查看其他页面");
+            sender.sendMessage(Component.text("使用 /xiuzhen top <页码> 查看其他页面", NamedTextColor.GRAY));
         }
     }
 

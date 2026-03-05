@@ -13,13 +13,6 @@ commands:
     aliases: [xz, xiuxian, xx]
     tab-complete: true
     
-  status:
-    description: 查看双系统综合状态
-    usage: /status
-    permission: simplexiuzhen.use
-    aliases: [zt, zhuangtai]
-    tab-complete: true
-    
   xiuzhenadmin:
     description: 修仙系统管理员命令
     usage: /xiuzhenadmin [setrealm|addexp|reloadconfig|backup]

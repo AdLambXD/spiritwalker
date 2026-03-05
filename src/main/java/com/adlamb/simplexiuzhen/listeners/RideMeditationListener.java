@@ -5,7 +5,8 @@ import java.util.Set;
 import java.util.UUID;
 
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
@@ -104,8 +105,8 @@ public class RideMeditationListener implements Listener {
             playerData.setMeditating(true);
             playerData.updateLastLocation(player.getLocation());
             
-            player.sendMessage(ChatColor.GREEN + "你骑乘着冥想盔甲架，自动进入打坐状态！");
-            player.sendMessage(ChatColor.YELLOW + "保持静止以获得修为加成...");
+            player.sendMessage(Component.text("你骑乘着冥想盔甲架，自动进入打坐状态！", NamedTextColor.GREEN));
+            player.sendMessage(Component.text("保持静止以获得修为加成...", NamedTextColor.YELLOW));
             
             // 播放打坐音效
             player.playSound(player.getLocation(), "entity.experience_orb.pickup", 0.5f, 1.5f);
@@ -125,7 +126,7 @@ public class RideMeditationListener implements Listener {
         // 如果玩家在打坐状态，则停止打坐
         if (playerData.isMeditating()) {
             playerData.setMeditating(false);
-            player.sendMessage(ChatColor.RED + "你离开了冥想盔甲架，打坐状态结束。");
+            player.sendMessage(Component.text("你离开了冥想盔甲架，打坐状态结束。", NamedTextColor.RED));
             
             // 添加冷却时间防止频繁切换
             meditationCooldown.add(playerId);

@@ -4,7 +4,8 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
-import org.bukkit.ChatColor;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.configuration.ConfigurationSection;
 
 /**
@@ -118,7 +119,8 @@ public class XiuzhenUtils {
      * 格式化消息颜色
      */
     public static String colorize(String message) {
-        return ChatColor.translateAlternateColorCodes('&', message);
+        // 将 & 颜色代码转换为 § 格式
+        return message.replace('&', '§');
     }
     
     /**

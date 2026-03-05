@@ -5,6 +5,13 @@ realms:
     display_name: "炼气"
     level: 1
     permission: "simplexiuzhen.realm.lianqi"
+    # 突破到下一境界（筑基）所需的材料
+    breakthrough_requirements:
+      items:
+        - material: IRON_INGOT
+          amount: 10
+        - material: GOLD_INGOT
+          amount: 5
     sub_levels:
       - name: "一层"
         required_exp: 0
@@ -29,6 +36,13 @@ realms:
     display_name: "筑基"
     level: 2
     permission: "simplexiuzhen.realm.zhujie"
+    # 突破到下一境界（金丹）所需的材料
+    breakthrough_requirements:
+      items:
+        - material: DIAMOND
+          amount: 5
+        - material: EMERALD
+          amount: 3
     sub_levels:
       - name: "初期"
         required_exp: 0
@@ -43,6 +57,13 @@ realms:
     display_name: "金丹"
     level: 3
     permission: "simplexiuzhen.realm.jindan"
+    # 突破到下一境界（元婴）所需的材料
+    breakthrough_requirements:
+      items:
+        - material: NETHER_STAR
+          amount: 1
+        - material: DRAGON_BREATH
+          amount: 10
     sub_levels:
       - name: "初期"
         required_exp: 0
@@ -57,6 +78,11 @@ realms:
     display_name: "元婴"
     level: 4
     permission: "simplexiuzhen.realm.yuanying"
+    # 突破到下一境界（化神）所需的材料
+    breakthrough_requirements:
+      items:
+        - material: NETHERITE_INGOT
+          amount: 3
     sub_levels:
       - name: "初期"
         required_exp: 0

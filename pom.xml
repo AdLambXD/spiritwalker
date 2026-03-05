@@ -112,6 +112,12 @@
                 <configuration>
                     <source>21</source>
                     <target>21</target>
+                    <showWarnings>false</showWarnings>
+                    <showDeprecation>false</showDeprecation>
+                    <compilerArgs>
+                        <arg>-Xlint:none</arg>
+                        <arg>-nowarn</arg>
+                    </compilerArgs>
                 </configuration>
             </plugin>
             <plugin>

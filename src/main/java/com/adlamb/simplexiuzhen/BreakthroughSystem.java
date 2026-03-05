@@ -3,7 +3,8 @@ package com.adlamb.simplexiuzhen;
 import java.util.List;
 import java.util.Map;
 
-import org.bukkit.ChatColor;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.Material;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
@@ -33,14 +34,14 @@ public class BreakthroughSystem {
         // 获取当前境界的所有段位
         String realmPath = "realms." + currentRealm + ".sub_levels";
         if (!realmsConfig.contains(realmPath)) {
-            player.sendMessage(ChatColor.RED + "当前境界配置异常！");
+            player.sendMessage(Component.text("当前境界配置异常！", NamedTextColor.RED));
             return false;
         }
         
         try {
             List<?> subLevels = realmsConfig.getList(realmPath);
             if (subLevels == null || subLevels.isEmpty()) {
-                player.sendMessage(ChatColor.RED + "境界段位配置为空！");
+                player.sendMessage(Component.text("境界段位配置为空！", NamedTextColor.RED));
                 return false;
             }
             
@@ -55,7 +56,7 @@ public class BreakthroughSystem {
             }
         } catch (Exception e) {
             plugin.getLogger().warning("检查修仙境界突破时出错: " + e.getMessage());
-            player.sendMessage(ChatColor.RED + "突破检查出现错误！");
+            player.sendMessage(Component.text("突破检查出现错误！", NamedTextColor.RED));
             return false;
         }
     }
@@ -71,14 +72,14 @@ public class BreakthroughSystem {
         // 获取当前境界的所有段位
         String realmPath = "martial_realms." + currentRealm + ".sub_levels";
         if (!martialConfig.contains(realmPath)) {
-            player.sendMessage(ChatColor.RED + "当前武者境界配置异常！");
+            player.sendMessage(Component.text("当前武者境界配置异常！", NamedTextColor.RED));
             return false;
         }
         
         try {
             List<?> subLevels = martialConfig.getList(realmPath);
             if (subLevels == null || subLevels.isEmpty()) {
-                player.sendMessage(ChatColor.RED + "武者境界段位配置为空！");
+                player.sendMessage(Component.text("武者境界段位配置为空！", NamedTextColor.RED));
                 return false;
             }
             
@@ -93,7 +94,7 @@ public class BreakthroughSystem {
             }
         } catch (Exception e) {
             plugin.getLogger().warning("检查武者境界突破时出错: " + e.getMessage());
-            player.sendMessage(ChatColor.RED + "突破检查出现错误！");
+            player.sendMessage(Component.text("突破检查出现错误！", NamedTextColor.RED));
             return false;
         }
     }
@@ -107,7 +108,7 @@ public class BreakthroughSystem {
         try {
             Object subLevelObj = subLevels.get(targetSubLevel);
             if (!(subLevelObj instanceof Map)) {
-                player.sendMessage(ChatColor.RED + "段位配置格式错误！");
+                player.sendMessage(Component.text("段位配置格式错误！", NamedTextColor.RED));
                 return false;
             }
             
@@ -131,13 +132,13 @@ public class BreakthroughSystem {
                 playerData.getCurrentExp() : playerData.getCurrentWushuExp();
                 
             if (currentExp < requiredExp) {
-                player.sendMessage(ChatColor.RED + "修为不足！需要 " + requiredExp + " 点修为。");
+                player.sendMessage(NamedTextColor.RED + "修为不足！需要 " + requiredExp + " 点修为。");
                 return false;
             }
             
             // 检查内力要求（仅武者系统）
             if ("wushu".equals(systemType) && playerData.getCurrentNeili() < requiredNeili) {
-                player.sendMessage(ChatColor.RED + "内力不足！需要 " + requiredNeili + " 点内力。");
+                player.sendMessage(NamedTextColor.RED + "内力不足！需要 " + requiredNeili + " 点内力。");
                 return false;
             }
             
@@ -152,10 +153,10 @@ public class BreakthroughSystem {
             // 执行突破
             if ("xiuzhen".equals(systemType)) {
                 playerData.setCurrentSubLevelIndex(targetSubLevel);
-                player.sendMessage(ChatColor.GREEN + "恭喜你成功突破到新的修仙段位！");
+                player.sendMessage(Component.text("恭喜你成功突破到新的修仙段位！", NamedTextColor.GREEN));
             } else {
                 playerData.setCurrentWushuSubLevelIndex(targetSubLevel);
-                player.sendMessage(ChatColor.GREEN + "恭喜你成功突破到新的武者段位！");
+                player.sendMessage(Component.text("恭喜你成功突破到新的武者段位！", NamedTextColor.GREEN));
             }
             
             plugin.getLogger().info("玩家 " + player.getName() + " 在 " + systemType + " 系统中突破到 " + 
@@ -165,7 +166,7 @@ public class BreakthroughSystem {
             
         } catch (Exception e) {
             plugin.getLogger().warning("执行段位突破时出错: " + e.getMessage());
-            player.sendMessage(ChatColor.RED + "突破过程中出现错误！");
+            player.sendMessage(Component.text("突破过程中出现错误！", NamedTextColor.RED));
             return false;
         }
     }
@@ -178,7 +179,7 @@ public class BreakthroughSystem {
         String nextRealm = getNextXiuzhenRealm(currentRealm);
         
         if (nextRealm == null) {
-            player.sendMessage(ChatColor.RED + "已达到最高等境界！");
+            player.sendMessage(Component.text("已达到最高等境界！", NamedTextColor.RED));
             return false;
         }
         
@@ -195,7 +196,7 @@ public class BreakthroughSystem {
         playerData.setCurrentSubLevelIndex(0);
         playerData.setCurrentExp(0);
         
-        player.sendMessage(ChatColor.GOLD + "天道有感！恭喜你成功突破到 " + nextRealm + " 境界！");
+        player.sendMessage(NamedTextColor.GOLD + "天道有感！恭喜你成功突破到 " + nextRealm + " 境界！");
         plugin.getLogger().info("玩家 " + player.getName() + " 突破到修仙境界: " + nextRealm);
         
         return true;
@@ -208,7 +209,7 @@ public class BreakthroughSystem {
         String nextRealm = getNextWushuRealm(currentRealm);
         
         if (nextRealm == null) {
-            player.sendMessage(ChatColor.RED + "已达到最高武者境界！");
+            player.sendMessage(Component.text("已达到最高武者境界！", NamedTextColor.RED));
             return false;
         }
         
@@ -225,7 +226,7 @@ public class BreakthroughSystem {
         playerData.setCurrentWushuSubLevelIndex(0);
         playerData.setCurrentWushuExp(0);
         
-        player.sendMessage(ChatColor.GOLD + "武道通神！恭喜你成功突破到 " + nextRealm + " 境界！");
+        player.sendMessage(NamedTextColor.GOLD + "武道通神！恭喜你成功突破到 " + nextRealm + " 境界！");
         plugin.getLogger().info("玩家 " + player.getName() + " 突破到武者境界: " + nextRealm);
         
         return true;
@@ -262,7 +263,7 @@ public class BreakthroughSystem {
                     if (material == null) continue;
                     
                     if (!hasItemCount(player, material, amount)) {
-                        player.sendMessage(ChatColor.RED + "缺少突破物品: " + itemName + " x" + amount);
+                        player.sendMessage(NamedTextColor.RED + "缺少突破物品: " + itemName + " x" + amount);
                         return false;
                     }
                 }
