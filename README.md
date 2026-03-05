@@ -70,22 +70,30 @@ mvn clean package
 5. 插件将自动生成配置文件
 
 ### 基础使用
-```bash
-# 修仙系统命令
-/xiuzhen gui        # 打开图形界面（推荐新手使用）
-/xiuzhen            # 查看修仙系统帮助
-/xiuzhen meditate   # 开始/停止打坐修炼
-/xiuzhen stats      # 查看修仙详细状态
-/xiuzhen top        # 查看修仙排行榜
-/xiuzhen info       # 查看修仙境界体系
 
-# 武者系统命令
-/wushu              # 查看武者系统帮助
-/wushu train        # 开始/停止战斗训练
-/wushu stats        # 查看武者详细状态
-/wushu breakthrough # 尝试武者境界突破
-/wushu kungfu list  # 查看可学武者功法
-/wushu info         # 查看武者境界体系
+**统一命令系统**：所有修炼相关功能都使用 `/xz` 或 `/xiuzhen`
+
+```bash
+# 基础命令（推荐使用短别名）
+/xz             # 查看个人信息和帮助
+/xz gui         # 打开图形界面
+/xz stats       # 查看详细状态（修仙 + 武者统一显示）
+/xz zt          # /xz stats 的短别名
+
+# 修仙系统
+/xz meditate    # 开始/停止打坐修炼
+/xz top         # 查看排行榜
+/xz info        # 了解境界体系
+
+# 武者系统
+/xz train           # 开始/停止战斗训练
+/xz breakthrough    # 尝试境界突破
+
+# 功法系统
+/xz kungfu list      # 查看可用功法
+/xz kungfu learn <ID> # 学习功法
+/xz kungfu use <ID>   # 使用功法
+/xz kungfu info <ID>  # 查看功法详情
 ```
 
 ## 🎮 游戏玩法
