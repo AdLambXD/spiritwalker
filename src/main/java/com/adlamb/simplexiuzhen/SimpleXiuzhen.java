@@ -5,22 +5,14 @@ import java.util.Map;
 import java.util.UUID;
 
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Particle;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
-import org.bukkit.command.CommandSender;
-import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
 
-import com.adlamb.simplexiuzhen.commands.WushuCommand;
 import com.adlamb.simplexiuzhen.commands.XiuzhenAdminCommand;
 import com.adlamb.simplexiuzhen.commands.XiuzhenCommand;
 import com.adlamb.simplexiuzhen.database.DatabaseManager;
@@ -30,22 +22,22 @@ import com.adlamb.simplexiuzhen.gui.GuiManager;
 import com.adlamb.simplexiuzhen.integration.ThirdPartyIntegration;
 import com.adlamb.simplexiuzhen.lang.LanguageManager;
 import com.adlamb.simplexiuzhen.listeners.MobKillListener;
+import com.adlamb.simplexiuzhen.listeners.PlayerQuitListener;
 import com.adlamb.simplexiuzhen.listeners.RideMeditationListener;
 import com.adlamb.simplexiuzhen.permissions.XiuzhenPermissions;
 import com.adlamb.simplexiuzhen.placeholder.XiuzhenPlaceholderExpansion;
-import com.adlamb.simplexiuzhen.utils.XiuzhenUtils;
-
 
 
 /**
  * 主类 - 修仙系统插件
  */
-public class SimpleXiuzhen extends JavaPlugin implements CommandExecutor, Listener {
+public class SimpleXiuzhen extends JavaPlugin implements Listener {
     private ConfigManager configManager;
     private DatabaseManager databaseManager;
     private PlayerDataDAO playerDataDAO;
     private RideMeditationListener rideMeditationListener;
     private MobKillListener mobKillListener;
+    private PlayerQuitListener playerQuitListener;
     private ThirdPartyIntegration thirdPartyIntegration;
     private XiuzhenPermissions permissionsManager;
     private LanguageManager languageManager;
@@ -53,7 +45,6 @@ public class SimpleXiuzhen extends JavaPlugin implements CommandExecutor, Listen
     private GuiManager guiManager;
     private BreakthroughSystem breakthroughSystem;
     private Map<UUID, PlayerData> playerDataMap = new HashMap<>();
-    private Map<UUID, EnhancedPlayerData> enhancedPlayerDataMap = new HashMap<>();
     private BukkitTask cultivationTask;
     private BukkitTask autoSaveTask;
 
@@ -77,7 +68,7 @@ public class SimpleXiuzhen extends JavaPlugin implements CommandExecutor, Listen
         // 初始化功法管理器
         enhancedKungFuManager = new EnhancedKungFuManager(this);
         
-        // 初始化GUI管理器
+        // 初始化 GUI 管理器
         guiManager = new GuiManager(this);
         
         // 初始化突破系统
@@ -89,23 +80,24 @@ public class SimpleXiuzhen extends JavaPlugin implements CommandExecutor, Listen
         // 初始化怪物击杀监听器
         mobKillListener = new MobKillListener(this);
         
+        // 初始化玩家退出监听器
+        playerQuitListener = new PlayerQuitListener(this);
+        
         // 初始化第三方插件集成
         thirdPartyIntegration = new ThirdPartyIntegration(this);
         Bukkit.getPluginManager().registerEvents(rideMeditationListener, this);
         Bukkit.getPluginManager().registerEvents(mobKillListener, this);
+        Bukkit.getPluginManager().registerEvents(playerQuitListener, this);
         Bukkit.getPluginManager().registerEvents(new GuiListener(this), this);
 
-        // 注册命令和TAB补全
+        // 注册命令和 TAB 补全
         XiuzhenCommand xiuzhenCommand = new XiuzhenCommand(this);
         XiuzhenAdminCommand xiuzhenAdminCommand = new XiuzhenAdminCommand(this);
-        WushuCommand wushuCommand = new WushuCommand(this);
         
         getCommand("xiuzhen").setExecutor(xiuzhenCommand);
         getCommand("xiuzhen").setTabCompleter(xiuzhenCommand);
         getCommand("xiuzhenadmin").setExecutor(xiuzhenAdminCommand);
         getCommand("xiuzhenadmin").setTabCompleter(xiuzhenAdminCommand);
-        getCommand("wushu").setExecutor(wushuCommand);
-        getCommand("wushu").setTabCompleter(wushuCommand);
 
         // 注册事件监听器
         Bukkit.getPluginManager().registerEvents(this, this);
@@ -119,7 +111,7 @@ public class SimpleXiuzhen extends JavaPlugin implements CommandExecutor, Listen
         getLogger().info(languageManager.getSystemMessage("plugin_enabled"));
         getLogger().info(languageManager.getSystemMessage("compatible_plugins", "plugins", thirdPartyIntegration.getEnabledPlugins()));
         
-        // 注册PlaceholderAPI扩展
+        // 注册 PlaceholderAPI 扩展
         registerPlaceholders();
     }
 
@@ -158,17 +150,15 @@ public class SimpleXiuzhen extends JavaPlugin implements CommandExecutor, Listen
                 for (Player player : Bukkit.getOnlinePlayers()) {
                     UUID playerId = player.getUniqueId();
                     PlayerData playerData = getPlayerData(playerId);
-                    EnhancedPlayerData enhancedPlayerData = getEnhancedPlayerData(playerId);
                     
                     // 检查玩家状态
                     boolean isMeditating = playerData.isMeditating();
                     boolean isRiding = rideMeditationListener.isPlayerRiding(playerId);
-                    boolean isInCombatTraining = enhancedPlayerData.isInCombatTraining();
-                    boolean isInCombat = enhancedPlayerData.isInCombat();
+                    boolean isInCombatTraining = playerData.isInCombatTraining();
+                    boolean isInCombat = playerData.isInCombat();
                     
                     // 修为增长条件：打坐状态、骑乘冥想状态或战斗训练状态
                     boolean canGainXiuzhenExp = isMeditating || isRiding;
-                    boolean canGainWushuExp = isInCombatTraining || isInCombat;
                     
                     // 修仙系统修为增长
                     if (canGainXiuzhenExp) {
@@ -192,7 +182,6 @@ public class SimpleXiuzhen extends JavaPlugin implements CommandExecutor, Listen
                             
                             double gain = baseGain * multiplier;
                             playerData.addExp(gain);
-                            enhancedPlayerData.addXiuzhenExp(gain);
                             
                             // 播放粒子效果
                             playMeditationParticles(player);
@@ -212,33 +201,33 @@ public class SimpleXiuzhen extends JavaPlugin implements CommandExecutor, Listen
                     // 因此移除自动增长逻辑，只保留内力消耗和恢复逻辑
                     // 在战斗状态下消耗内力，在非战斗训练状态下恢复内力
                     if (isInCombat) {
-                        enhancedPlayerData.consumeNeili(0.5); // 战斗中缓慢消耗内力
+                        playerData.consumeNeili(0.5); // 战斗中缓慢消耗内力
                     } else if (isInCombatTraining) {
                         // 非战斗时恢复内力（战斗训练状态也视为非战斗状态）
-                        enhancedPlayerData.recoverNeili(0.3);
+                        playerData.recoverNeili(0.3);
                     }
                     
                     // 记录战斗时间（仅在真正战斗时）
                     if (isInCombat) {
-                        enhancedPlayerData.recordCombatTime();
+                        playerData.recordCombatTime();
                     }
                     
                     // 自然资源恢复（非修炼状态时）
-                    if (!canGainXiuzhenExp && !canGainWushuExp) {
+                    if (!canGainXiuzhenExp) {
                         // 缓慢恢复灵力和内力
-                        enhancedPlayerData.recoverLingli(0.1);
-                        enhancedPlayerData.recoverNeili(0.1);
+                        playerData.recoverLingli(0.1);
+                        playerData.recoverNeili(0.1);
                     }
                 }
             }
-        }.runTaskTimer(this, 20L, 20L); // 20 ticks = 1秒
+        }.runTaskTimer(this, 20L, 20L); // 20 ticks = 1 秒
     }
 
     /**
      * 启动自动保存任务
      */
     private void startAutoSaveTask() {
-        int intervalTicks = configManager.getAutoSaveIntervalMinutes() * 1200; // 分钟转ticks (1分钟=1200ticks)
+        int intervalTicks = configManager.getAutoSaveIntervalMinutes() * 1200; // 分钟转 ticks (1 分钟=1200ticks)
         autoSaveTask = new BukkitRunnable() {
             @Override
             public void run() {
@@ -268,19 +257,6 @@ public class SimpleXiuzhen extends JavaPlugin implements CommandExecutor, Listen
         }
         return data;
     }
-    
-    /**
-     * 获取增强版玩家数据（如果不存在则创建）
-     */
-    public EnhancedPlayerData getEnhancedPlayerData(UUID playerId) {
-        EnhancedPlayerData data = enhancedPlayerDataMap.get(playerId);
-        if (data == null) {
-            data = new EnhancedPlayerData(playerId, this);
-            data.loadData();
-            enhancedPlayerDataMap.put(playerId, data);
-        }
-        return data;
-    }
 
     /**
      * 保存所有在线玩家的数据
@@ -291,85 +267,7 @@ public class SimpleXiuzhen extends JavaPlugin implements CommandExecutor, Listen
         }
     }
 
-    /**
-     * 命令执行器
-     */
-    @Override
-    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        if (!(sender instanceof Player)) {
-            sender.sendMessage(ChatColor.RED + "只有玩家可以使用此命令！");
-            return true;
-        }
-
-        Player player = (Player) sender;
-        PlayerData playerData = getPlayerData(player.getUniqueId());
-
-        if (args.length == 0) {
-            // 显示玩家当前状态
-            displayPlayerStatus(player, playerData);
-            return true;
-        }
-
-        if (args.length >= 1) {
-            if ("meditate".equalsIgnoreCase(args[0])) {
-                // 切换打坐状态
-                playerData.toggleMeditation(player);
-                
-                if (playerData.isMeditating()) {
-                    player.sendMessage(ChatColor.GREEN + "开始打坐修炼！");
-                    player.sendMessage(ChatColor.YELLOW + "保持静止以获得修为...");
-                } else {
-                    player.sendMessage(ChatColor.RED + "停止打坐修炼。");
-                }
-                return true;
-            }
-        }
-
-        player.sendMessage(ChatColor.RED + "未知的子命令！使用 /xiuzhen 查看状态，/xiuzhen meditate 开始/停止打坐");
-        return true;
-    }
-
-    /**
-     * 显示玩家状态
-     */
-    private void displayPlayerStatus(Player player, PlayerData playerData) {
-        FileConfiguration realmsConfig = configManager.getRealmsConfig();
-        
-        // 获取境界显示名称
-        String realmDisplayName = realmsConfig.getString("realms." + playerData.getCurrentRealmKey() + ".display_name", "未知境界");
-        
-        // 获取段位名称
-        String subLevelPath = "realms." + playerData.getCurrentRealmKey() + ".sub_levels." + playerData.getCurrentSubLevelIndex() + ".name";
-        String subLevelName = realmsConfig.getString(subLevelPath, "未知段位");
-        
-        // 获取当前段位升级所需修为
-        String expRequirementPath = "realms." + playerData.getCurrentRealmKey() + ".sub_levels." + playerData.getCurrentSubLevelIndex() + ".required_exp";
-        int expRequirement = XiuzhenUtils.getConfigInt(realmsConfig, expRequirementPath, 0);
-        
-        player.sendMessage(ChatColor.GOLD + "=== 修仙状态 ===");
-        player.sendMessage(ChatColor.AQUA + "境界: " + ChatColor.WHITE + realmDisplayName + subLevelName);
-        player.sendMessage(ChatColor.AQUA + "修为: " + ChatColor.WHITE + playerData.getCurrentExp() + "/" + expRequirement);
-        player.sendMessage(ChatColor.AQUA + "状态: " + (playerData.isMeditating() ? 
-            ChatColor.GREEN + "打坐中" : ChatColor.RED + "未打坐"));
-    }
-
-    /**
-     * 监听玩家移动事件
-     */
-    @EventHandler
-    public void onPlayerMove(PlayerMoveEvent event) {
-        Player player = event.getPlayer();
-        PlayerData playerData = getPlayerData(player.getUniqueId());
-        
-        // 如果玩家在打坐且移动了，则停止打坐
-        if (playerData.isMeditating() && playerData.hasMoved(event.getTo())) {
-            playerData.setMeditating(false);
-            player.sendMessage(ChatColor.RED + "你移动了，打坐被打断！");
-        }
-    }
-
-
-    // Getter方法
+    // Getter 方法
     public ConfigManager getConfigManager() {
         return configManager;
     }
@@ -403,23 +301,28 @@ public class SimpleXiuzhen extends JavaPlugin implements CommandExecutor, Listen
     }
     
     /**
-     * 注册PlaceholderAPI扩展
+     * 注册 PlaceholderAPI 扩展
      */
     private void registerPlaceholders() {
         if (getServer().getPluginManager().getPlugin("PlaceholderAPI") != null) {
             new XiuzhenPlaceholderExpansion(this).register();
-            getLogger().info("PlaceholderAPI扩展注册成功！");
+            getLogger().info("PlaceholderAPI 扩展注册成功！");
         } else {
-            getLogger().info("未检测到PlaceholderAPI，跳过扩展注册");
+            getLogger().info("未检测到 PlaceholderAPI，跳过扩展注册");
         }
     }
-    
-
     
     /**
      * 从内存中移除玩家数据（用于重置功能）
      */
     public void removePlayerData(UUID playerId) {
         playerDataMap.remove(playerId);
+    }
+    
+    /**
+     * 获取玩家数据映射（用于监听器）
+     */
+    public Map<UUID, PlayerData> getPlayerDataMap() {
+        return playerDataMap;
     }
 }
