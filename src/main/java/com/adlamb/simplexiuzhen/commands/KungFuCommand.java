@@ -3,8 +3,7 @@ package com.adlamb.simplexiuzhen.commands;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.format.NamedTextColor;
+import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -30,7 +29,7 @@ public class KungFuCommand implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (!(sender instanceof Player)) {
-            sender.sendMessage(Component.text("只有玩家可以使用此命令！", NamedTextColor.RED));
+            sender.sendMessage(ChatColor.RED + "只有玩家可以使用此命令！");
             return true;
         }
         
@@ -67,11 +66,11 @@ public class KungFuCommand implements CommandExecutor {
      * 显示功法帮助
      */
     private void showKungFuHelp(Player player) {
-        player.sendMessage(Component.text("=== 功法系统 ===", NamedTextColor.GOLD));
-        player.sendMessage(NamedTextColor.AQUA + "/kungfu list" + NamedTextColor.WHITE + " - 查看可用功法");
-        player.sendMessage(NamedTextColor.AQUA + "/kungfu learn <功法ID>" + NamedTextColor.WHITE + " - 学习功法");
-        player.sendMessage(NamedTextColor.AQUA + "/kungfu use <功法ID>" + NamedTextColor.WHITE + " - 使用功法");
-        player.sendMessage(NamedTextColor.AQUA + "/kungfu info <功法ID>" + NamedTextColor.WHITE + " - 查看功法信息");
+        player.sendMessage(ChatColor.GOLD + "=== 功法系统 ===");
+        player.sendMessage(ChatColor.AQUA + "/kungfu list" + ChatColor.WHITE + " - 查看可用功法");
+        player.sendMessage(ChatColor.AQUA + "/kungfu learn <功法ID>" + ChatColor.WHITE + " - 学习功法");
+        player.sendMessage(ChatColor.AQUA + "/kungfu use <功法ID>" + ChatColor.WHITE + " - 使用功法");
+        player.sendMessage(ChatColor.AQUA + "/kungfu info <功法ID>" + ChatColor.WHITE + " - 查看功法信息");
     }
     
     /**
@@ -83,20 +82,20 @@ public class KungFuCommand implements CommandExecutor {
         
         for (EnhancedKungFu kungFu : kungFuManager.getAllKungFus()) {
             if (kungFuManager.hasKungFu(player.getUniqueId(), kungFu.getId())) {
-                availableKungFus.add(NamedTextColor.GREEN + kungFu.getName() + " [" + kungFu.getLevel() + "] (已学习)");
+                availableKungFus.add(ChatColor.GREEN + kungFu.getName() + " [" + kungFu.getLevel() + "] (已学习)");
             } else if (kungFuManager.canLearnKungFu(player.getUniqueId(), kungFu.getId())) {
-                availableKungFus.add(NamedTextColor.YELLOW + kungFu.getName() + " [" + kungFu.getLevel() + "] (可学习)");
+                availableKungFus.add(ChatColor.YELLOW + kungFu.getName() + " [" + kungFu.getLevel() + "] (可学习)");
             } else {
-                availableKungFus.add(NamedTextColor.GRAY + kungFu.getName() + " [" + kungFu.getLevel() + "] (未满足条件)");
+                availableKungFus.add(ChatColor.GRAY + kungFu.getName() + " [" + kungFu.getLevel() + "] (未满足条件)");
             }
         }
         
         if (availableKungFus.isEmpty()) {
-            player.sendMessage(Component.text("没有可用的功法", NamedTextColor.RED));
+            player.sendMessage(ChatColor.RED + "没有可用的功法");
             return;
         }
         
-        player.sendMessage(Component.text("=== 可用功法 ===", NamedTextColor.GOLD));
+        player.sendMessage(ChatColor.GOLD + "=== 可用功法 ===");
         for (String kungFu : availableKungFus) {
             player.sendMessage(kungFu);
         }
@@ -107,15 +106,15 @@ public class KungFuCommand implements CommandExecutor {
      */
     private void learnKungFu(Player player, String[] args) {
         if (args.length < 2) {
-            player.sendMessage(Component.text("请指定功法ID", NamedTextColor.RED));
+            player.sendMessage(ChatColor.RED + "请指定功法ID");
             return;
         }
         
         String kungFuId = args[1];
         if (kungFuManager.learnKungFu(player.getUniqueId(), kungFuId)) {
-            player.sendMessage(NamedTextColor.GREEN + "成功学习功法: " + kungFuManager.getKungFu(kungFuId).getName());
+            player.sendMessage(ChatColor.GREEN + "成功学习功法: " + kungFuManager.getKungFu(kungFuId).getName());
         } else {
-            player.sendMessage(Component.text("无法学习该功法，请检查境界和修为要求", NamedTextColor.RED));
+            player.sendMessage(ChatColor.RED + "无法学习该功法，请检查境界和修为要求");
         }
     }
     
@@ -124,7 +123,7 @@ public class KungFuCommand implements CommandExecutor {
      */
     private void useKungFu(Player player, String[] args) {
         if (args.length < 2) {
-            player.sendMessage(Component.text("请指定功法ID", NamedTextColor.RED));
+            player.sendMessage(ChatColor.RED + "请指定功法ID");
             return;
         }
         
@@ -133,36 +132,36 @@ public class KungFuCommand implements CommandExecutor {
         EnhancedKungFu kungFu = kungFuManager.getKungFu(kungFuId);
         
         if (kungFu == null) {
-            player.sendMessage(Component.text("找不到该功法", NamedTextColor.RED));
+            player.sendMessage(ChatColor.RED + "找不到该功法");
             return;
         }
         
         if (!kungFuManager.hasKungFu(player.getUniqueId(), kungFuId)) {
-            player.sendMessage(Component.text("您还没有学习该功法", NamedTextColor.RED));
+            player.sendMessage(ChatColor.RED + "您还没有学习该功法");
             return;
         }
         
         if (kungFuManager.isKungFuOnCooldown(player.getUniqueId(), kungFuId)) {
-            player.sendMessage(Component.text("该功法还在冷却中", NamedTextColor.RED));
+            player.sendMessage(ChatColor.RED + "该功法还在冷却中");
             return;
         }
         
         // 检查资源消耗
         if (!kungFu.canUse(playerData)) {
             if ("xiuzhen".equals(kungFu.getSystemType())) {
-                player.sendMessage(NamedTextColor.RED + "灵力不足！需要 " + kungFu.getLingliCost() + " 点灵力");
+                player.sendMessage(ChatColor.RED + "灵力不足！需要 " + kungFu.getLingliCost() + " 点灵力");
             } else {
-                player.sendMessage(NamedTextColor.RED + "内力不足！需要 " + kungFu.getNeiliCost() + " 点内力");
+                player.sendMessage(ChatColor.RED + "内力不足！需要 " + kungFu.getNeiliCost() + " 点内力");
             }
             return;
         }
         
         // 使用功法
         if (kungFuManager.useKungFu(player.getUniqueId(), kungFuId)) {
-            player.sendMessage(NamedTextColor.GREEN + "成功使用功法: " + kungFu.getName());
-            player.sendMessage(NamedTextColor.YELLOW + "效果: " + String.join(", ", kungFu.getEffects()));
+            player.sendMessage(ChatColor.GREEN + "成功使用功法: " + kungFu.getName());
+            player.sendMessage(ChatColor.YELLOW + "效果: " + String.join(", ", kungFu.getEffects()));
         } else {
-            player.sendMessage(Component.text("使用功法失败", NamedTextColor.RED));
+            player.sendMessage(ChatColor.RED + "使用功法失败");
         }
     }
     
@@ -171,7 +170,7 @@ public class KungFuCommand implements CommandExecutor {
      */
     private void showKungFuInfo(Player player, String[] args) {
         if (args.length < 2) {
-            player.sendMessage(Component.text("请指定功法ID", NamedTextColor.RED));
+            player.sendMessage(ChatColor.RED + "请指定功法ID");
             return;
         }
         
@@ -179,25 +178,25 @@ public class KungFuCommand implements CommandExecutor {
         EnhancedKungFu kungFu = kungFuManager.getKungFu(kungFuId);
         
         if (kungFu == null) {
-            player.sendMessage(Component.text("找不到该功法", NamedTextColor.RED));
+            player.sendMessage(ChatColor.RED + "找不到该功法");
             return;
         }
         
-        player.sendMessage(Component.text("=== 功法信息 ===", NamedTextColor.GOLD));
-        player.sendMessage(NamedTextColor.AQUA + "名称: " + NamedTextColor.WHITE + kungFu.getName());
-        player.sendMessage(NamedTextColor.AQUA + "描述: " + NamedTextColor.WHITE + kungFu.getDescription());
-        player.sendMessage(NamedTextColor.AQUA + "类型: " + NamedTextColor.WHITE + kungFu.getTypeDisplay());
-        player.sendMessage(NamedTextColor.AQUA + "等级: " + NamedTextColor.WHITE + kungFu.getLevelDisplay());
-        player.sendMessage(NamedTextColor.AQUA + "所属系统: " + NamedTextColor.WHITE + kungFu.getSystemTypeDisplay());
-        player.sendMessage(NamedTextColor.AQUA + "境界要求: " + NamedTextColor.WHITE + kungFu.getRealmRequirement());
-        player.sendMessage(NamedTextColor.AQUA + "修为要求: " + NamedTextColor.WHITE + kungFu.getExpRequirement());
+        player.sendMessage(ChatColor.GOLD + "=== 功法信息 ===");
+        player.sendMessage(ChatColor.AQUA + "名称: " + ChatColor.WHITE + kungFu.getName());
+        player.sendMessage(ChatColor.AQUA + "描述: " + ChatColor.WHITE + kungFu.getDescription());
+        player.sendMessage(ChatColor.AQUA + "类型: " + ChatColor.WHITE + kungFu.getTypeDisplay());
+        player.sendMessage(ChatColor.AQUA + "等级: " + ChatColor.WHITE + kungFu.getLevelDisplay());
+        player.sendMessage(ChatColor.AQUA + "所属系统: " + ChatColor.WHITE + kungFu.getSystemTypeDisplay());
+        player.sendMessage(ChatColor.AQUA + "境界要求: " + ChatColor.WHITE + kungFu.getRealmRequirement());
+        player.sendMessage(ChatColor.AQUA + "修为要求: " + ChatColor.WHITE + kungFu.getExpRequirement());
         if (kungFu.getLingliCost() > 0) {
-            player.sendMessage(NamedTextColor.AQUA + "灵力消耗: " + NamedTextColor.WHITE + kungFu.getLingliCost());
+            player.sendMessage(ChatColor.AQUA + "灵力消耗: " + ChatColor.WHITE + kungFu.getLingliCost());
         }
         if (kungFu.getNeiliCost() > 0) {
-            player.sendMessage(NamedTextColor.AQUA + "内力消耗: " + NamedTextColor.WHITE + kungFu.getNeiliCost());
+            player.sendMessage(ChatColor.AQUA + "内力消耗: " + ChatColor.WHITE + kungFu.getNeiliCost());
         }
-        player.sendMessage(NamedTextColor.AQUA + "冷却时间: " + NamedTextColor.WHITE + kungFu.getCooldownTicks() / 20 + "秒");
-        player.sendMessage(NamedTextColor.AQUA + "效果: " + NamedTextColor.WHITE + String.join(", ", kungFu.getEffects()));
+        player.sendMessage(ChatColor.AQUA + "冷却时间: " + ChatColor.WHITE + kungFu.getCooldownTicks() / 20 + "秒");
+        player.sendMessage(ChatColor.AQUA + "效果: " + ChatColor.WHITE + String.join(", ", kungFu.getEffects()));
     }
 }

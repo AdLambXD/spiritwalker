@@ -177,16 +177,34 @@ settings:
 ### 管理员命令
 ```bash
 # 境界管理
-/xiuzhenadmin setrealm <玩家> <境界>
+/xiuzhenadmin setxiuzhenrealm <玩家> <境界>    # 设置修仙境界
+/xiuzhenadmin setwushurealm <玩家> <境界>      # 设置武道境界
 
 # 修为调整
-/xiuzhenadmin addexp <玩家> <修为值>
+/xiuzhenadmin addxiuzhenexp <玩家> <修为值>    # 添加修仙修为
+/xiuzhenadmin addwushuexp <玩家> <修为值>      # 添加武道修为
+/xiuzhenadmin addlingli <玩家> <数量>          # 添加灵力
+/xiuzhenadmin addneili <玩家> <数量>           # 添加内力
+
+# 查询命令
+/xiuzhenadmin inspect <玩家>          # 查看玩家详细信息
+/xiuzhenadmin listkungfu <玩家>       # 查看玩家功法列表
+
+# 特殊操作
+/xiuzhenadmin forcebreakthrough <玩家> <类型>  # 强制突破
+/xiuzhenadmin clearkungfu <玩家>               # 清空功法
+/xiuzhenadmin reset <玩家>                     # 重置数据
 
 # 系统维护
 /xiuzhenadmin reloadconfig    # 重载配置
-/xiuzhenadmin backup         # 数据备份
-/xiuzhenadmin reset <玩家>   # 重置数据
+/xiuzhenadmin backup          # 数据备份
+
+# 命令别名
+/xza
+/xzadmin
 ```
+
+📋 **完整命令手册**：查看 [管理员命令文档.md](管理员命令文档.md)
 
 ## 🔧 技术规格
 
